@@ -1,0 +1,90 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://ui/default_theme.tres" type="Theme" id=1]
+[ext_resource path="res://game_screen/gui.gd" type="Script" id=2]
+[ext_resource path="res://ui/cancel_shortcut.tres" type="ShortCut" id=3]
+[ext_resource path="res://title_screen/settings/settings_scene.tscn" type="PackedScene" id=4]
+
+[node name="Gui" type="Node"]
+script = ExtResource( 2 )
+
+[node name="PauseContainer" type="ColorRect" parent="."]
+pause_mode = 2
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PauseControls" type="VBoxContainer" parent="PauseContainer"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -256.0
+margin_top = -150.0
+margin_right = 256.0
+margin_bottom = 150.0
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PauseTitle" type="Label" parent="PauseContainer/PauseControls"]
+margin_top = 115.0
+margin_right = 512.0
+margin_bottom = 141.0
+text = "ui_pause"
+align = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PauseContainer/PauseControls"]
+margin_top = 145.0
+margin_right = 512.0
+margin_bottom = 185.0
+alignment = 1
+
+[node name="QuitButton" type="Button" parent="PauseContainer/PauseControls/HBoxContainer"]
+margin_right = 98.0
+margin_bottom = 40.0
+shortcut_in_tooltip = false
+text = "ui_quit"
+
+[node name="Control" type="Control" parent="PauseContainer/PauseControls/HBoxContainer"]
+margin_left = 102.0
+margin_right = 212.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+
+[node name="SettingsButton" type="Button" parent="PauseContainer/PauseControls/HBoxContainer"]
+margin_left = 216.0
+margin_right = 362.0
+margin_bottom = 40.0
+shortcut_in_tooltip = false
+text = "ui_settings"
+
+[node name="ContinueButton" type="Button" parent="PauseContainer/PauseControls/HBoxContainer"]
+margin_left = 366.0
+margin_right = 512.0
+margin_bottom = 40.0
+shortcut_in_tooltip = false
+shortcut = ExtResource( 3 )
+text = "ui_continue"
+
+[node name="Settings" parent="PauseContainer" instance=ExtResource( 4 )]
+visible = false
+show_language_settings = false
+
+[node name="BackToTitleButton" parent="PauseContainer/Settings/VBoxContainer" index="2"]
+margin_left = 414.0
+margin_right = 512.0
+text = "ui_back"
+
+[connection signal="pressed" from="PauseContainer/PauseControls/HBoxContainer/QuitButton" to="." method="_on_QuitButton_pressed"]
+[connection signal="pressed" from="PauseContainer/PauseControls/HBoxContainer/SettingsButton" to="." method="_on_SettingsButton_pressed"]
+[connection signal="pressed" from="PauseContainer/PauseControls/HBoxContainer/ContinueButton" to="." method="_on_ContinueButton_pressed"]
+[connection signal="pressed" from="PauseContainer/Settings/VBoxContainer/BackToTitleButton" to="." method="_on_Settings_BackToTitleButton_pressed"]
+
+[editable path="PauseContainer/Settings"]

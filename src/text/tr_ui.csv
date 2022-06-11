@@ -1,0 +1,26 @@
+key,en,ru,uk
+_tr_ui,"UI localization, button titles, tab headers, labels, etc.",,
+ui_pause,Pause,Пауза,Пауза
+ui_retry,Retry,Еще Раз,Ще Раз
+ui_continue,Continue,Продолжить,Продовжити
+ui_key_none,No Key,Нет Клавиши,Немає Клавіши
+ui_fullscreen,Full Screen,Полный Экран,Повний Екран
+ui_particles,Enable Particles,Включить Частицы,Увімкнути Частинки
+ui_sound_settings,Sound,Звук,Звук
+ui_language_settings,Language,Язык,Мова
+ui_other_settings,Other,Другие,Інші
+ui_key_bindings,Key Bindings,Управление,Управління
+ui_master_volume,Master,Общий,Загальний
+ui_music_volume,Music,Музыка,Музика
+ui_sfx_volume,SFX,Эффекты,Ефекти
+ui_speech_volume,Speech,Голос,Голос
+ui_start_game,Start,Старт,Старт
+ui_settings,Settings,Настройки,Налаштування
+ui_tutorial,Tutorial,Как Играть,Як Грати
+ui_credits,Credits,Благодарности,Подяки
+ui_back_to_title,Back,Назад,Назад
+ui_back,Back,Назад,Назад
+ui_quit,Quit,Выход,Вихід
+ui_lang_ru,RU (Русский),RU (Русский),RU (Русский)
+ui_lang_en,EN (English),EN (English),EN (English)
+ui_lang_uk,UA (Українська),UA (Українська),UA (Українська)

@@ -1,0 +1,16 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+
+[deps]
+
+files=[ "res://text/tr.en.translation", "res://text/tr.ru.translation", "res://text/tr.uk.translation" ]
+
+source_file="res://text/tr.csv"
+dest_files=[ "res://text/tr.en.translation", "res://text/tr.ru.translation", "res://text/tr.uk.translation" ]
+
+[params]
+
+compress=true
+delimiter=0

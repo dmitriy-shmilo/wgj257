@@ -1,0 +1,7 @@
+key,en,ru,uk
+_tr_keys,"Key bindings and keyboard-related localization",,
+key_up,Up,Вверх,Вгору
+key_down,Down,Вниз,Вниз
+key_left,Left,Влево,Вліво
+key_right,Right,Вправо,Вправо
+key_system_pause,Pause,Пауза,Пауза
