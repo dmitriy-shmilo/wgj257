@@ -3,27 +3,35 @@ extends Control
 const MEETING_REQUEST_SCENE = preload("res://game_screen/meeting_request.tscn")
 const DAY_COUNT = 5
 const SLOT_COUNT = 18
+const TOTAL_SLOT_COUNT = DAY_COUNT * SLOT_COUNT
 
+export(float) var time_speed = 1.0 / 90.0 / 10  # % per second
 
 onready var _gui = $"Gui"
 onready var _cursor: Control = $"Cursor"
 onready var _meeting_queue: Control = $"MeetingQueueMargin/MeetingQueue"
 onready var _calendar: Control = $"Calendar"
+onready var _week_label: Label = $"WeekLabel"
+onready var _time_shroud: TimeShroud = $"TimeShroud"
 
+var _time = 0
+var _week_number = 1
 var _is_dragging = false
 var _current_request: MeetingRequest = null
 var _pending_requests: Array = []
-
 var _slots: Array = []
 
 func _ready() -> void:
-	_slots.resize(DAY_COUNT * SLOT_COUNT)
+	_slots.resize(TOTAL_SLOT_COUNT)
 	create_request()
 	create_request()
 	create_request()
 
 
-func _process(_event):
+func _process(delta):
+	_time += delta * time_speed
+	_time_shroud.progress = _time
+
 	if Input.is_action_just_pressed("system_pause"):
 		_gui.pause()
 	
@@ -72,7 +80,10 @@ func place_request(request: MeetingRequest, slot: Vector2) -> void:
 
 func can_place_request(request: MeetingRequest, slot: Vector2) -> bool:
 	var index = slot.x * SLOT_COUNT + slot.y
-	
+
+	if float(index) / TOTAL_SLOT_COUNT <= _time:
+		return false
+
 	for i in range(request.meeting.duration):
 		if _slots[index + i] != null and _slots[index + i] != request:
 			return false
