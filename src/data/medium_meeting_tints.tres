@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://data/color_pool.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+colors = [ Color( 0.913725, 0.960784, 0.615686, 1 ), Color( 0.690196, 0.921569, 0.576471, 1 ), Color( 0.529412, 0.658824, 0.537255, 1 ), Color( 0.996078, 0.666667, 0.894118, 1 ) ]

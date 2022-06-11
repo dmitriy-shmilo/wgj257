@@ -5,9 +5,13 @@ const SHORT_TITLE_LENGTH = 14
 
 enum Special {
 	NONE,
-	NO_RESCHEDULE,
 	IMPORTANT,
-	LEISURE
+	NO_RESCHEDULE,
+	SECOND_HALF_ONLY,
+	FIRST_HALF_ONLY,
+	IN_ADVANCE_ONLY,
+	LEISURE,
+	NOT_IMPORTANT,
 }
 
 const SPECIAL_TEXTURE_MAP = {
@@ -21,6 +25,7 @@ export(String) var title = "Title"
 export(int) var duration = 2
 export(Special) var special = Special.NONE
 export(Color) var tint = Color.white
+export(float) var expiration_time = 20.0
 
 func get_short_title() -> String:
 	if title.length() > SHORT_TITLE_LENGTH:
@@ -41,3 +46,4 @@ func get_duration_string() -> String:
 
 func get_icon() -> Texture:
 	return SPECIAL_TEXTURE_MAP[special]
+

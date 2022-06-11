@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://data/string_pool.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+strings = [ "name_dmitriy", "name_irene", "name_jon", "name_gabriel", "name_max", "name_ann", "name_ivan", "name_olga", "name_daniel" ]
