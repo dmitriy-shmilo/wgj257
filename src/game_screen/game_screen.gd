@@ -5,6 +5,7 @@ const MEETING_REQUEST_SCENE = preload("res://game_screen/meeting_request.tscn")
 onready var _gui = $"Gui"
 onready var _cursor: Control = $"Cursor"
 onready var _meeting_queue: Control = $"MeetingQueue"
+onready var _calendar: Control = $"Calendar"
 
 var _is_dragging = false
 var _current_request: MeetingRequest = null
@@ -18,7 +19,7 @@ func _process(_event):
 		_gui.pause()
 	
 	if _is_dragging:
-		_cursor.rect_global_position = get_global_mouse_position()
+		_cursor.rect_global_position = _snap(get_global_mouse_position())
 
 
 func create_request() -> void:
@@ -42,6 +43,17 @@ func _drag_cursor_end(request) -> void:
 
 func _setup_request(request: MeetingRequest):
 	request.connect("gui_input", self, "_on_meeting_request_gui_input", [request])
+
+
+func _snap(pos: Vector2) -> Vector2:
+	
+	if pos.y <= _calendar.rect_position.y \
+		or pos.y >= _calendar.rect_position.y + _calendar.rect_size.y:
+			return pos
+
+	pos.y = floor(pos.y / 16) * 16
+	pos.x = floor(pos.x / 96) * 96
+	return pos
 
 
 func _on_meeting_request_gui_input(event: InputEvent, request: MeetingRequest) -> void:
