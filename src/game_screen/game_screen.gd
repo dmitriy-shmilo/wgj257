@@ -2,6 +2,8 @@ extends Control
 
 const MEETING_REQUEST_SCENE = preload("res://game_screen/meeting_request.tscn")
 
+
+
 onready var _gui = $"Gui"
 onready var _cursor: Control = $"Cursor"
 onready var _meeting_queue: Control = $"MeetingQueue"
@@ -23,7 +25,13 @@ func _process(_event):
 
 
 func create_request() -> void:
+	var meeting = Meeting.new()
+	meeting.title = "Meet and greet"
+	meeting.duration = 3
+	meeting.special = Meeting.Special.LEISURE
+	
 	var scene = MEETING_REQUEST_SCENE.instance()
+	scene.meeting = meeting
 	scene.rect_position = Vector2(100, 0)
 	_meeting_queue.add_child(scene)
 	_setup_request(scene)
@@ -33,6 +41,7 @@ func _drag_cursor_start(request) -> void:
 	_cursor.visible = true
 	_is_dragging = true
 	_current_request = request
+	_cursor.meeting = request.meeting
 
 
 func _drag_cursor_end(request) -> void:
@@ -46,7 +55,6 @@ func _setup_request(request: MeetingRequest):
 
 
 func _snap(pos: Vector2) -> Vector2:
-	
 	if pos.y <= _calendar.rect_position.y \
 		or pos.y >= _calendar.rect_position.y + _calendar.rect_size.y:
 			return pos
