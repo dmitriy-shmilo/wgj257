@@ -1,11 +1,15 @@
 key,en,ru,uk
 _tr_ui,"UI localization, button titles, tab headers, labels, etc.",,
+ui_ok,OK,ОК,ОК
 ui_pause,Pause,Пауза,Пауза
 ui_retry,Retry,Еще Раз,Ще Раз
 ui_continue,Continue,Продолжить,Продовжити
 ui_key_none,No Key,Нет Клавиши,Немає Клавіши
 ui_fullscreen,Full Screen,Полный Экран,Повний Екран
 ui_particles,Enable Particles,Включить Частицы,Увімкнути Частинки
+ui_disable_hints,Disable Hints,Отключить Подсказки,Вимкнути Підказки
+ui_enable_hints,Enable Hints,Включить Подсказки,Увімкнути Підказки
+ui_enable_screenshake,Enable Screenshake,Разрешить скриншок,Дозволити Скріншок 
 ui_sound_settings,Sound,Звук,Звук
 ui_language_settings,Language,Язык,Мова
 ui_other_settings,Other,Другие,Інші

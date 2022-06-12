@@ -26,6 +26,7 @@ onready var _hud: Hud = $"Top/Hud"
 onready var _fader: Fader = $"Fader"
 onready var _game_over: Node = $"GameOverScreen"
 onready var _shaker: Shaker = $"Shaker"
+onready var _dialog_popup: DialogPopup = $"DialogPopup"
 
 var _time = 0
 var _is_time_progressing = true
@@ -41,7 +42,26 @@ var _column_width = 96
 var _row_height = 16
 var _current_queue = []
 var _backlog = []
+var _intro_text = [
+	tr("txt_intro1"),
+	tr("txt_intro2"),
+	tr("txt_intro3")
+]
+var _current_intro_text = -1
 
+var _hints_pending = {
+	"txt_hint_payday" : true, 
+	"txt_hint_weekend" : true,
+	"txt_hint_time" : true,
+	"txt_hint_expiration" : true,
+	"txt_hint_no_reschedule" : true,
+	"txt_hint_important" : true,
+	"txt_hint_unimportant" : true,
+	"txt_hint_leisure" : true,
+	"txt_hint_free_time" : true,
+	"txt_hint_start" : true,
+	"txt_hint_reschedule" : true
+}
 
 func _ready() -> void:
 	_hud.max_mood = MAX_MOOD
@@ -55,7 +75,7 @@ func _ready() -> void:
 	_setup_pickups()
 	MeetingGenerator.generate_week(_current_queue, _week_number, DAY_COUNT, SLOT_COUNT)
 	create_request(_current_queue.pop_back())
-
+	_show_intro()
 
 func _process(delta):
 	# TODO: for testing, remove later
@@ -73,12 +93,19 @@ func _process(delta):
 		if current_item is MeetingRequest:
 			_hud.mood_modifier = Hud.MoodModifier.DOWN
 			_hud.current_mood -= MOOD_DECREASE_RATE * delta
+			
+			if _hud.current_mood <= _hud.max_mood / 2 \
+				and Settings.enable_hints \
+				and _hints_pending["txt_hint_free_time"]:
+					_hints_pending["txt_hint_free_time"] = false
+					_show_dialog(tr("txt_hint_free_time"), true, Dialog.Emotion.FROWN)
 		elif _hud.current_mood < _hud.max_mood:
 			_hud.mood_modifier = Hud.MoodModifier.UP
 			_hud.current_mood += MOOD_RESTORATION_RATE * delta
 		else:
 			_hud.mood_modifier = Hud.MoodModifier.NONE
 
+		
 		if _current_request != null and _current_request.slot.x >= 0 and float(_to_slot_index(_current_request.slot)) / TOTAL_SLOT_COUNT <= _time:
 			_release_current_request()
 			_sfx_player.stream = preload("res://assets/sound/fail2.wav")
@@ -117,6 +144,11 @@ func _process(delta):
 		_cursor.is_selected = not can_place_request(_current_request)
 
 
+func _show_intro() -> void:
+	_current_intro_text = 0
+	_show_dialog(_intro_text[0], false)
+
+
 func get_request() -> Node:
 	var index = floor(TOTAL_SLOT_COUNT * _time)
 	return _slots[index]
@@ -124,7 +156,6 @@ func get_request() -> Node:
 
 func get_calendar() -> Control:
 	return _calendars[_current_calendar % _calendars.size()]
-
 
 
 func create_request(meeting) -> void:
@@ -161,7 +192,18 @@ func place_request(request: MeetingRequest, slot: Vector2) -> void:
 	request.get_parent().remove_child(request)
 	_calendar.add_child(request)
 	request.rect_global_position = _cursor.rect_global_position
-
+	
+	if Settings.enable_hints \
+		and _hints_pending["txt_hint_reschedule"]:
+			var request_count = 0
+			var last_req
+			for slot in _slots:
+				if slot is MeetingRequest and last_req != slot:
+					last_req = slot
+					request_count += 1
+				if request_count >= 3:
+					_hints_pending["txt_hint_reschedule"] = false
+					_show_dialog(tr("txt_hint_reschedule"), true)
 
 func can_place_request(request: MeetingRequest) -> bool:
 	var cursor_pos = _cursor.rect_position
@@ -273,7 +315,6 @@ func _setup_pickups() -> void:
 		slot.y *= _row_height
 		pickup.rect_position = slot
 		_calendar.add_child(pickup)
-	
 
 
 func _drag_cursor_start(request: MeetingRequest) -> void:
@@ -292,6 +333,7 @@ func _drag_cursor_start(request: MeetingRequest) -> void:
 	
 	_sfx_player.stream = preload("res://assets/sound/take1.wav")
 	_sfx_player.play()
+
 
 func _release_current_request() -> void:
 	if _current_request != null:
@@ -354,6 +396,14 @@ func _remove_from_pending(request: MeetingRequest) -> void:
 		req.target_position.x = req.rect_size.x * i
 
 
+func _show_dialog(text: String, is_hint: bool = false, emotion: int = 0) -> void:
+	_is_time_progressing = false
+	_dialog_popup.visible = true
+	_dialog_popup.text = text
+	_dialog_popup.emotion = emotion
+	_dialog_popup.show_disable_hints = is_hint
+
+
 func _on_meeting_request_gui_input(event: InputEvent, request: MeetingRequest) -> void:
 	if event.is_action_pressed("action"):
 		_drag_cursor_start(request)
@@ -387,3 +437,22 @@ func _on_Hud_mood_ran_out() -> void:
 	
 	_hud.shake_mood_meter()
 	_game_over.show()
+
+
+func _on_DialogPopup_disable_hints_pressed() -> void:
+	_is_time_progressing = true
+	_dialog_popup.visible = false
+	Settings.enable_hints = false
+
+
+func _on_DialogPopup_ok_pressed() -> void:
+	_is_time_progressing = true
+	_dialog_popup.visible = false
+	
+	if _current_intro_text < _intro_text.size() - 1:
+		_current_intro_text += 1
+		_show_dialog(_intro_text[_current_intro_text], false)
+	
+	if _current_intro_text == _intro_text.size() - 1 and Settings.enable_hints:
+		_current_intro_text += 1
+		_show_dialog(tr("txt_hint_start"), true)

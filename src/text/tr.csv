@@ -1,4 +1,18 @@
 key,en,ru,uk
-_tr,"Other localization",,
-txt_credits,"Thank you for playing","Спасибо за то что играли","Дякуємо за те що грали"
-txt_tutorial,"How to play","Как играть","Як грати"
+_tr,Other localization,,
+txt_credits,Thank you for playing,Спасибо за то что играли,Дякуємо за те що грали
+txt_tutorial,How to play,Как играть,Як грати
+txt_intro1,"Hello. Are you my new assistant? Welcome. My name is Mr. Cash Money, I'm an executive director at this fine establishment. I presume HR showed you around already? Good.",,
+txt_intro2,"Everybody in this company wants to book some time on my calendar, and it's your job to make sure I don't have to worry which meetings I'm supposed to be present on every week.",,
+txt_intro3,"It's not all meets and greets for me, though. I still do some actual work around here too. So do me a favor and make sure I don't get stuck in back-to-back calls every day. Even if it means I have to skip a meeting or two. Alright? Alright.",,
+txt_hint_payday,"Yeah, one of the perks of being my assistant is that you get paid ([img]res://assets/texture/icon_score.tres[/img]) daily. I'm not a frugal type, and will even throw an extra bonus for you if you perform well.",,
+txt_hint_weekend,I love Fridays! You know why? Because they end! A day-long golf session will surely help me relax after a week of hard work.,,
+txt_hint_time,"Have you noticed how quickly the time flies? Yeah, me too. It's a pity we can't jump into a time machine and schedule some of the least useful calls to happen in the past.",,
+txt_hint_expiration,"It came to my attention that '%s' was supposed to happen some time this week, but you didn't allocate any of my time for it. I'll let it slide this time, but do make sure that I don't miss a lot of meetings. It's bad for my rep.",,
+txt_hint_no_reschedule,"Some people on '%s' are quite busy ([img]res://assets/texture/icon_lock.tres[/img]). Once we agree on the meeting time, they won't agree to a reschedule.",,
+txt_hint_important,"It's extremely important ([img]res://assets/texture/icon_warning.tres[/img]) that I attend this upcoming '%s'. Make sure I get there, or I'm going to be REALLY upset.",,
+txt_hint_unimportant,"Ugh, '%s' is just clutter on my calendar. I bet nobody will even notice if I don't come.",,
+txt_hint_leisure,"Ooh, I love me some '%s'! Really helps with stress management.",,
+txt_hint_free_time,"Meetings,calls,meetings,conferences! When am I supposed to do any actual work?!",,
+txt_hint_start,"Now. Let's get started, shall we? I know there's a couple of pending appointments already, waiting to be booked on my calendar. Just drag 'em up from the queue, and I'll do the rest.",,
+txt_hint_reschedule,Feel free to move my appointments around the board even after they're placed. You can reschedule most of my future meetings if the need be.,,

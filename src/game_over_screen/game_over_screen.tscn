@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=2]
 
+[ext_resource path="res://game_screen/dialog.tscn" type="PackedScene" id=1]
 [ext_resource path="res://ui/cancel_shortcut.tres" type="ShortCut" id=2]
 [ext_resource path="res://ui/default_theme.tres" type="Theme" id=3]
-[ext_resource path="res://assets/texture/boss_yelling.tres" type="SpriteFrames" id=4]
 [ext_resource path="res://game_over_screen/game_over_screen.gd" type="Script" id=5]
 
 [node name="GameOverScreen" type="ColorRect"]
@@ -12,52 +12,46 @@ theme = ExtResource( 3 )
 color = Color( 0, 0, 0, 0.807843 )
 script = ExtResource( 5 )
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-position = Vector2( 94, 150 )
-frames = ExtResource( 4 )
-frame = 1
-playing = true
-
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-margin_left = 123.0
-margin_top = 189.0
-margin_right = 517.0
-margin_bottom = 229.0
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -202.0
+margin_top = -81.0
+margin_right = 202.0
+margin_bottom = 63.0
 alignment = 1
 
-[node name="QuitButton" type="Button" parent="HBoxContainer"]
-margin_left = 91.0
-margin_right = 189.0
+[node name="Dialog" parent="VBoxContainer" instance=ExtResource( 1 )]
+margin_top = 17.0
+margin_right = 404.0
+margin_bottom = 82.0
+emotion = 2
+text = "You're fired!"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 86.0
+margin_right = 404.0
+margin_bottom = 126.0
+alignment = 1
+
+[node name="QuitButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+margin_left = 96.0
+margin_right = 194.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 50, 0 )
 shortcut_in_tooltip = false
 shortcut = ExtResource( 2 )
 text = "ui_quit"
 
-[node name="RetryButton" type="Button" parent="HBoxContainer"]
-margin_left = 193.0
-margin_right = 303.0
+[node name="RetryButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+margin_left = 198.0
+margin_right = 308.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 100, 0 )
 shortcut_in_tooltip = false
 text = "ui_retry"
 
-[node name="Panel" type="Panel" parent="."]
-margin_left = 128.0
-margin_top = 117.0
-margin_right = 573.0
-margin_bottom = 183.0
-
-[node name="RichTextLabel" type="RichTextLabel" parent="Panel"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 2.0
-margin_top = 2.0
-margin_right = -2.0
-margin_bottom = -2.0
-bbcode_enabled = true
-bbcode_text = "[font=res://ui/font_body.tres]How hard is it to keep my schedule well-organized?! You're fired![/font]"
-text = "How hard is it to keep my schedule well-organized?! You're fired!"
-
-[connection signal="pressed" from="HBoxContainer/QuitButton" to="." method="_on_QuitButton_pressed"]
-[connection signal="pressed" from="HBoxContainer/RetryButton" to="." method="_on_RetryButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/QuitButton" to="." method="_on_QuitButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/RetryButton" to="." method="_on_RetryButton_pressed"]

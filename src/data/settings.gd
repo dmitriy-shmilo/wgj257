@@ -15,6 +15,8 @@ var speech_volume:float = DEFAULT_VOLUME setget set_speech_volume
 
 var fullscreen: bool = false setget set_fullscreen
 var particles: bool = true
+var enable_hints: bool = true
+var enable_screenshake: bool = true
 
 var locale: String = "" setget set_locale
 
@@ -116,17 +118,17 @@ func _get_data() -> Dictionary:
 
 	return {
 		"locale" : locale,
+		"other" : {
+			"enable_hints" : enable_hints,
+			"fullscreen" : fullscreen,
+			"enable_screenshake" : enable_screenshake
+		},
 		"sound" : {
 			"master_volume" : master_volume,
 			"sfx_volume" : sfx_volume,
 			"music_volume" : music_volume,
 			"speech_volume" : speech_volume
-		},
-		"video": {
-			"particles" : particles,
-			"fullscreen" : fullscreen
-		},
-		"actions" : action_map
+		}
 	}
 
 
@@ -140,21 +142,7 @@ func _set_from_data(data: Dictionary) -> void:
 		set_music_volume(data["sound"].get("music_volume", DEFAULT_VOLUME))
 		set_speech_volume(data["sound"].get("speech_volume", DEFAULT_VOLUME))
 	
-	if data.has("video"):
-		set_fullscreen(data["video"].get("fullscreen", true))
-		particles = data["video"].get("particles", true)	
-	
-	if data.has("actions"):
-		for action in CONFIGURABLE_KEYS:
-			if not data["actions"].has(action):
-				continue;
-			
-			InputMap.action_erase_events(action)
-			
-			var scancode = data["actions"][action]
-			if scancode == null:
-				continue
-			
-			var event = InputEventKey.new();
-			event.scancode = scancode
-			InputMap.action_add_event(action, event)
+	if data.has("other"):
+		set_fullscreen(data["other"].get("fullscreen", true))	
+		enable_hints = data["other"].get("enable_hints", true)
+		enable_screenshake = data["other"].get("enable_screenshake", true)

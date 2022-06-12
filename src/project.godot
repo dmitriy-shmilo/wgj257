@@ -19,6 +19,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://title_screen/credits/credits_scene.gd"
 }, {
+"base": "Control",
+"class": "Dialog",
+"language": "GDScript",
+"path": "res://game_screen/dialog.gd"
+}, {
+"base": "MarginContainer",
+"class": "DialogPopup",
+"language": "GDScript",
+"path": "res://game_screen/dialog_popup.gd"
+}, {
 "base": "Node",
 "class": "Fader",
 "language": "GDScript",
@@ -102,6 +112,8 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "ColorPool": "",
 "CreditsScene": "",
+"Dialog": "",
+"DialogPopup": "",
 "Fader": "",
 "Gui": "",
 "Hud": "",
