@@ -1,6 +1,8 @@
 class_name Hud
 extends Control
 
+signal mood_ran_out()
+
 const MOOD_UP = preload("res://assets/texture/icon_mood_up.tres")
 const MOOD_DOWN = preload("res://assets/texture/icon_mood_down.tres")
 
@@ -45,6 +47,9 @@ func set_max_mood(value: float) -> void:
 
 
 func set_current_mood(value: float) -> void:
+	if value <= 0:
+		emit_signal("mood_ran_out")
+
 	current_mood = clamp(value, 0, max_mood)
 	if is_inside_tree():
 		_mood_progress.value = current_mood

@@ -3,11 +3,12 @@ extends Control
 const MEETING_REQUEST_SCENE = preload("res://game_screen/meeting_request.tscn")
 const PICKUP_SCENE = preload("res://game_screen/pickup.tscn")
 
+const MAX_MOOD = 100.0
 const DAY_COUNT: int = 5
 const SLOT_COUNT: int = 18
 const TOTAL_SLOT_COUNT = DAY_COUNT * SLOT_COUNT
-const MOOD_RESTORATION_RATE = 1.0 # per second
-const MOOD_DECREASE_RATE = 1.0 # per second
+const MOOD_RESTORATION_RATE = 1.5 # per second
+const MOOD_DECREASE_RATE = 2 # per second
 const EXPIRATION_PENALTY = 15.0 # mood points
 
 export(float) var time_speed = 1.0 / TOTAL_SLOT_COUNT / 2.0 # % per second
@@ -38,8 +39,12 @@ var _current_calendar = 0
 var _current_day = 0
 var _column_width = 96
 var _row_height = 16
+var _current_queue = []
+var _backlog = []
+
 
 func _ready() -> void:
+	_hud.max_mood = MAX_MOOD
 	_column_width = _calendar.rect_size.x / DAY_COUNT
 	_cursor.column_width = _column_width
 	_cursor.row_height = _row_height
@@ -48,7 +53,8 @@ func _ready() -> void:
 	_hud.set_current_week(_week_number)
 	_slots.resize(TOTAL_SLOT_COUNT)
 	_setup_pickups()
-	create_request()
+	MeetingGenerator.generate_week(_current_queue, _week_number, DAY_COUNT, SLOT_COUNT)
+	create_request(_current_queue.pop_back())
 
 
 func _process(delta):
@@ -92,8 +98,16 @@ func _process(delta):
 
 	if _time_since_tick >= tick_interval:
 		_time_since_tick = 0.0
-		if randi() % 5 >= _pending_requests.size():
-			create_request()
+		if _pending_requests.empty():
+			if not _backlog.empty():
+				create_request(_backlog.pop_back())
+			elif not _current_queue.empty():
+				create_request(_current_queue.pop_back())
+		else:
+			if not _current_queue.empty() and randi() % _current_queue.size() >= _pending_requests.size():
+				create_request(_current_queue.pop_back())
+			if not _backlog.empty() and randi() % _backlog.size() >= _pending_requests.size():
+				create_request(_backlog.pop_back())
 
 	if Input.is_action_just_pressed("system_pause"):
 		_gui.pause()
@@ -112,17 +126,8 @@ func get_calendar() -> Control:
 	return _calendars[_current_calendar % _calendars.size()]
 
 
-func create_request() -> void:
-	var meeting
-	# TODO: adjust difficulty as weeks progress
-	# TODO: pre-generate meetings based on total time
-	match randi() % 10:
-		0:
-			meeting = MeetingGenerator.generate_hard()
-		1,2:
-			meeting = MeetingGenerator.generate_medium()
-		_:
-			meeting = MeetingGenerator.generate_easy()
+
+func create_request(meeting) -> void:
 	var scene = MEETING_REQUEST_SCENE.instance()
 	scene.is_expiring = true
 	scene.meeting = meeting
@@ -245,6 +250,11 @@ func _end_week() -> void:
 
 
 func _start_week() -> void:
+	if not _current_queue.empty():
+		_backlog.append_array(_current_queue)
+		_current_queue.clear()
+
+	MeetingGenerator.generate_week(_current_queue, _week_number, DAY_COUNT, SLOT_COUNT)
 	_hud.set_current_week(_week_number)
 	_is_time_progressing = true
 

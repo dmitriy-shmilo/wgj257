@@ -1,4 +1,4 @@
-extends VBoxContainer
+extends Control
 
 func _on_QuitButton_pressed():
 	var err = get_tree().change_scene("res://title_screen/title_screen.tscn")
