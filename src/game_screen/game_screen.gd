@@ -1,11 +1,14 @@
 extends Control
 
 const MEETING_REQUEST_SCENE = preload("res://game_screen/meeting_request.tscn")
+const PICKUP_SCENE = preload("res://game_screen/pickup.tscn")
+
 const DAY_COUNT: int = 5
 const SLOT_COUNT: int = 18
 const TOTAL_SLOT_COUNT = DAY_COUNT * SLOT_COUNT
 const MOOD_RESTORATION_RATE = 1.0 # per second
 const MOOD_DECREASE_RATE = 1.0 # per second
+const EXPIRATION_PENALTY = 15.0 # mood points
 
 export(float) var time_speed = 1.0 / TOTAL_SLOT_COUNT / 2.0 # % per second
 export(float) var tick_interval = 1.0 # seconds
@@ -30,11 +33,18 @@ var _slots: Array = []
 var _time_since_tick = 0.0
 var _current_calendar = 0
 var _current_day = 0
-
+var _column_width = 96
+var _row_height = 16
 
 func _ready() -> void:
+	_column_width = _calendar.rect_size.x / DAY_COUNT
+	_cursor.column_width = _column_width
+	_cursor.row_height = _row_height
+	_cursor.rect_size.x = _column_width
+	_cursor.rect_size.y = _row_height
 	_hud.set_current_week(_week_number)
 	_slots.resize(TOTAL_SLOT_COUNT)
+	_setup_pickups()
 	create_request()
 
 
@@ -46,7 +56,12 @@ func _process(delta):
 		time_speed = 1.0 / TOTAL_SLOT_COUNT / 2.0
 
 	if _is_time_progressing:
-		if get_request() != null:
+		var current_item = get_request()
+
+		if current_item is Pickup:
+			current_item.pick_up()
+
+		if current_item is MeetingRequest:
 			_hud.mood_modifier = Hud.MoodModifier.DOWN
 			_hud.current_mood -= MOOD_DECREASE_RATE * delta
 		elif _hud.current_mood < _hud.max_mood:
@@ -66,7 +81,6 @@ func _process(delta):
 
 		if float(_current_day + 1) / DAY_COUNT <= _time:
 			_current_day += 1
-			_end_day()
 
 		if _time >= 1.0:
 			_reset_time()
@@ -83,9 +97,10 @@ func _process(delta):
 	
 	if _is_dragging:
 		_cursor.rect_global_position = _snap(get_global_mouse_position())
-		
+		_cursor.is_selected = not can_place_request(_current_request)
 
-func get_request() -> MeetingRequest:
+
+func get_request() -> Node:
 	var index = floor(TOTAL_SLOT_COUNT * _time)
 	return _slots[index]
 
@@ -108,6 +123,10 @@ func create_request() -> void:
 	var scene = MEETING_REQUEST_SCENE.instance()
 	scene.is_expiring = true
 	scene.meeting = meeting
+	scene.column_width = _column_width
+	scene.row_height = _row_height
+	scene.rect_size.x = _column_width
+	scene.rect_size.y = _row_height * 2
 	scene.rect_position.x += _meeting_queue.rect_size.x
 	scene.rect_position.x += scene.rect_size.x * _pending_requests.size()
 	scene.target_position.x = scene.rect_size.x * _pending_requests.size()
@@ -157,9 +176,13 @@ func can_place_request(request: MeetingRequest) -> bool:
 
 	for i in range(request.meeting.duration):
 		if _slots[index + i] != null and _slots[index + i] != request:
-			return false
+			return false # taken by a different appointment
 		if (index + i) / SLOT_COUNT != lane:
-			return false
+			return false # not in the same lane
+		if (index + i) % SLOT_COUNT == 0:
+			return false # padding hours, top
+		if (index + i) % SLOT_COUNT == SLOT_COUNT - 1:
+			return false # padding hours, bottom
 
 	return true
 
@@ -168,11 +191,6 @@ func _reset_time() -> void:
 	_time = 0.0
 	_time_shroud.progress = 0.0
 	_current_day = 0
-
-
-func _end_day() -> void:
-	_hud.current_mood += _hud.max_mood / DAY_COUNT
-	_hud.current_score += 5
 
 
 func _end_week() -> void:
@@ -199,15 +217,23 @@ func _end_week() -> void:
 			 	_calendar.rect_position.y), \
 			0.75, Tween.TRANS_BACK)
 	_week_end_tween.start()
+	_sfx_player.stream = preload("res://assets/sound/week_end1.wav")
+	_sfx_player.play()
 	
 	yield(_week_end_tween, "tween_all_completed")
 
 	for n in prev_calendar.get_children():
-		n.queue_free()
+		if n is MeetingRequest:
+			n.queue_free()
+		elif n is Pickup:
+			n.queue_free()
 	
 	for i in range(_slots.size()):
 		_slots[i] = null
 	
+	
+	_setup_pickups()
+
 	for req in _pending_requests:
 		req.is_expiring = true
 
@@ -218,6 +244,23 @@ func _end_week() -> void:
 func _start_week() -> void:
 	_hud.set_current_week(_week_number)
 	_is_time_progressing = true
+
+
+func _setup_pickups() -> void:
+	for i in range(DAY_COUNT):
+		var pickup = PICKUP_SCENE.instance() as Pickup
+		pickup.is_payday = true
+		pickup.is_mood_up = i == DAY_COUNT - 1
+		pickup.connect("picked_up", self, "_on_pickup_picked_up")
+		
+		var slot = Vector2(i, SLOT_COUNT - 1)
+		_slots[_to_slot_index(slot)] = pickup
+
+		slot.x *= _column_width
+		slot.y *= _row_height
+		pickup.rect_position = slot
+		_calendar.add_child(pickup)
+	
 
 
 func _drag_cursor_start(request: MeetingRequest) -> void:
@@ -238,7 +281,8 @@ func _drag_cursor_start(request: MeetingRequest) -> void:
 	_sfx_player.play()
 
 func _release_current_request() -> void:
-	_current_request.is_selected = false
+	if _current_request != null:
+		_current_request.is_selected = false
 	_cursor.visible = false
 	_is_dragging = false
 	_current_request = null
@@ -271,15 +315,15 @@ func _snap(pos: Vector2) -> Vector2:
 		or pos.y >= _calendar.rect_position.y + _calendar.rect_size.y:
 			return pos
 
-	pos.y = floor(pos.y / 16) * 16
-	pos.x = floor(pos.x / 96) * 96
+	pos.y = floor(pos.y / _row_height) * _row_height
+	pos.x = floor(pos.x / _column_width) * _column_width
 	return pos
 
 
 func _to_slot_position(pos: Vector2) -> Vector2:
 	pos -= _calendar.rect_position
-	pos.y = int(pos.y / 16)
-	pos.x = int(pos.x / 96)
+	pos.y = int(pos.y / _row_height)
+	pos.x = int(pos.x / _column_width)
 	return pos
 
 
@@ -307,6 +351,14 @@ func _on_meeting_request_gui_input(event: InputEvent, request: MeetingRequest) -
 func _on_meeting_request_expired(request: MeetingRequest) -> void:
 	if _cursor.meeting == request.meeting:
 		_release_current_request()
-
 	_remove_from_pending(request)
+	
+	_hud.current_mood -= EXPIRATION_PENALTY
+	_hud.shake_mood_meter()
 
+
+func _on_pickup_picked_up(sender: Pickup):
+	if sender.is_payday:
+		_hud.current_score += 5.00
+	if sender.is_mood_up:
+		_hud.current_mood += 25

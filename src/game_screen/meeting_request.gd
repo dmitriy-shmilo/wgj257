@@ -14,6 +14,8 @@ var current_expiration = 0.0
 var target_position = Vector2.ZERO
 var is_selected = false setget set_is_selected
 var slot: Vector2 = Vector2(-1, -1)
+var row_height = 16
+var column_width = 96
 
 onready var _background: Control = $"Background"
 onready var _title_label: Label = $"MarginContainer/VBoxContainer/TitleLabel"
@@ -57,8 +59,8 @@ func set_is_resizing(value: bool) -> void:
 	is_resizing = value
 	if meeting != null and is_inside_tree():
 		_duration_label.get_parent().visible = meeting.duration > 1
-		rect_size.y = meeting.duration * 16
-		rect_size.x = 96 # TODO: magic numbers
+		rect_size.y = meeting.duration * row_height
+		rect_size.x = column_width
 
 
 func set_meeting(value: Meeting):
@@ -72,7 +74,7 @@ func set_meeting(value: Meeting):
 		_background.material.set_shader_param("tint", meeting.tint)
 		if is_resizing:
 			_duration_label.get_parent().visible = meeting.duration > 1
-			rect_size.y = meeting.duration * 16
+			rect_size.y = meeting.duration * row_height
 
 
 func set_is_selected(value: bool) -> void:

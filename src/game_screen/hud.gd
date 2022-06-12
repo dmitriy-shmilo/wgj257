@@ -26,6 +26,8 @@ onready var _mood_progress: TextureProgress = $"MoodProgress"
 onready var _score_label: Label = $"ScoreLabel"
 onready var _week_label: Label = $"WeekLabel"
 onready var _animation_player: AnimationPlayer = $"AnimationPlayer"
+onready var _shaker: Shaker = $"Shaker"
+onready var _sfx_player: AudioStreamPlayer = $"SfxPlayer"
 
 func _ready() -> void:
 	_animation_player.play("default")
@@ -43,7 +45,7 @@ func set_max_mood(value: float) -> void:
 
 
 func set_current_mood(value: float) -> void:
-	current_mood = min(max_mood, value)
+	current_mood = clamp(value, 0, max_mood)
 	if is_inside_tree():
 		_mood_progress.value = current_mood
 
@@ -70,6 +72,10 @@ func set_mood_modifier(value: int) -> void:
 
 
 func set_current_score(value: int) -> void:
+	if value > current_score:
+		_sfx_player.stream = preload("res://assets/sound/score_gain1.wav")
+		_sfx_player.play()
+
 	current_score = value
 	if is_inside_tree():
 		_score_label.text = "%0.2f" % value
@@ -79,3 +85,7 @@ func set_current_week(value: int) -> void:
 	current_week = value
 	if is_inside_tree():
 		_week_label.text = tr("ui_week_label") % [value]
+
+
+func shake_mood_meter() -> void:
+	_shaker.shake_horizontal(_mood_progress, "rect_position", 6, 10)

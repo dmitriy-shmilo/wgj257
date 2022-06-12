@@ -55,9 +55,19 @@ _global_script_classes=[ {
 "path": "res://game_screen/meeting_request.gd"
 }, {
 "base": "Control",
+"class": "Pickup",
+"language": "GDScript",
+"path": "res://game_screen/pickup.gd"
+}, {
+"base": "Control",
 "class": "SettingsScene",
 "language": "GDScript",
 "path": "res://title_screen/settings/settings_scene.gd"
+}, {
+"base": "Node",
+"class": "Shaker",
+"language": "GDScript",
+"path": "res://util/shaker.gd"
 }, {
 "base": "Node",
 "class": "State",
@@ -99,7 +109,9 @@ _global_script_class_icons={
 "Meeting": "",
 "MeetingGenerator": "",
 "MeetingRequest": "",
+"Pickup": "",
 "SettingsScene": "",
+"Shaker": "",
 "State": "",
 "StateMachine": "",
 "StringPool": "",
@@ -123,7 +135,7 @@ UserSaveData="*res://data/user_save_data.gd"
 
 [display]
 
-window/size/width=480
+window/size/width=640
 window/size/height=360
 window/size/test_width=720
 window/size/test_height=540

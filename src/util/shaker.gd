@@ -1,3 +1,4 @@
+class_name Shaker
 extends Node
 
 const DEFAULT_STEPS = 5
