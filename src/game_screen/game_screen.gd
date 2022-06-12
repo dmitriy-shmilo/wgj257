@@ -22,6 +22,9 @@ onready var _sfx_player: AudioStreamPlayer = $"SfxPlayer"
 onready var _calendar: Control = _calendars[0]
 onready var _week_end_tween: Tween = $"WeekEndTween"
 onready var _hud: Hud = $"Top/Hud"
+onready var _fader: Fader = $"Fader"
+onready var _game_over: Node = $"GameOverScreen"
+onready var _shaker: Shaker = $"Shaker"
 
 var _time = 0
 var _is_time_progressing = true
@@ -362,3 +365,15 @@ func _on_pickup_picked_up(sender: Pickup):
 		_hud.current_score += 5.00
 	if sender.is_mood_up:
 		_hud.current_mood += 25
+
+
+func _on_Hud_mood_ran_out() -> void:
+	_is_time_progressing = false
+
+	_sfx_player.stream = preload("res://assets/sound/lose1.wav")
+	_sfx_player.play()
+	
+	_shaker.shake_horizontal(self, "rect_position", 8)
+	
+	_hud.shake_mood_meter()
+	_game_over.show()

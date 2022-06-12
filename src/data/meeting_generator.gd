@@ -72,3 +72,24 @@ static func generate_hard() -> Meeting:
 			result.title = SIMPLE_ACTION_STRINGS.random_string_loc()# % [NAME_POOL.random_string_loc()]
 			result.tint = MEDIUM_TINT_POOL.random_color()
 	return result
+
+
+static func generate_week(queue: Array, week_number: int, day_count: int, slots_per_day: int) -> Array:
+	var max_duration = day_count * slots_per_day / 2 + min(week_number / 2, slots_per_day) - day_count * 2
+	var duration = 0
+	
+	while duration <= max_duration:
+		var item
+		var rand = randi() % 10 - min(week_number / 2, 7)
+		match rand:
+			1, 7, 8, 9:
+				item = generate_easy()
+			2, 4, 5, 6:
+				item = generate_medium()
+			_:
+				item = generate_hard()
+		
+		duration += item.duration
+		queue.append(item)
+
+	return queue

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://game_screen/game_screen.gd" type="Script" id=1]
 [ext_resource path="res://game_screen/gui.tscn" type="PackedScene" id=2]
@@ -13,6 +13,8 @@
 [ext_resource path="res://assets/texture/icon_score.tres" type="Texture" id=11]
 [ext_resource path="res://game_screen/hud.gd" type="Script" id=12]
 [ext_resource path="res://util/shaker.tscn" type="PackedScene" id=13]
+[ext_resource path="res://ui/fader.tscn" type="PackedScene" id=14]
+[ext_resource path="res://game_over_screen/game_over_screen.tscn" type="PackedScene" id=15]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 3 )
@@ -269,3 +271,12 @@ is_static = true
 bus = "Sfx"
 
 [node name="WeekEndTween" type="Tween" parent="."]
+
+[node name="Fader" parent="." instance=ExtResource( 14 )]
+
+[node name="GameOverScreen" parent="." instance=ExtResource( 15 )]
+visible = false
+
+[node name="Shaker" parent="." instance=ExtResource( 13 )]
+
+[connection signal="mood_ran_out" from="Top/Hud" to="." method="_on_Hud_mood_ran_out"]
