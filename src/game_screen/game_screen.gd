@@ -14,6 +14,7 @@ onready var _meeting_queue: Control = $"MeetingQueueMargin/MeetingQueue"
 onready var _calendar: Control = $"Calendar"
 onready var _week_label: Label = $"WeekLabel"
 onready var _time_shroud: TimeShroud = $"TimeShroud"
+onready var _sfx_player: AudioStreamPlayer = $"SfxPlayer"
 
 var _time = 0
 var _week_number = 1
@@ -105,10 +106,10 @@ func can_place_request(request: MeetingRequest, slot: Vector2) -> bool:
 
 func _drag_cursor_start(request: MeetingRequest) -> void:
 	if not request.is_expiring:
-		var pos = request.rect_position
-		var slot = _to_slot_position(pos)
-		var index = _to_slot_index(slot)
+		var index = _to_slot_index(request.slot)
 		if float(index) / TOTAL_SLOT_COUNT <= _time:
+			_sfx_player.stream = preload("res://assets/sound/fail2.wav")
+			_sfx_player.play()
 			return
 
 	_cursor.visible = true
@@ -116,21 +117,32 @@ func _drag_cursor_start(request: MeetingRequest) -> void:
 	_current_request = request
 	_current_request.is_selected = true
 	_cursor.meeting = request.meeting
+	
+	_sfx_player.stream = preload("res://assets/sound/take1.wav")
+	_sfx_player.play()
 
 
 func _drag_cursor_end(request) -> void:
 	var cursor_pos = _cursor.rect_position
 	var cal_rect = Rect2(_calendar.rect_position, _calendar.rect_size)
+	var success = false
 	
 	if cal_rect.has_point(cursor_pos):
 		var slot_pos = _to_slot_position(_cursor.rect_position)
 		if can_place_request(request, slot_pos):
 			place_request(request, slot_pos)
+			success = true
 
 	_current_request.is_selected = false
 	_cursor.visible = false
 	_is_dragging = false
 	_current_request = null
+
+	if success:
+		_sfx_player.stream = preload("res://assets/sound/put1.wav")
+	else:
+		_sfx_player.stream = preload("res://assets/sound/fail1.wav")
+	_sfx_player.play()
 
 
 func _setup_request(request: MeetingRequest):

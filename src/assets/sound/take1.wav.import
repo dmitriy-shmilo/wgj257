@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/take1.wav-8c8860e9ff60247569f7fcd36a225b53.sample"
+
+[deps]
+
+source_file="res://assets/sound/take1.wav"
+dest_files=[ "res://.import/take1.wav-8c8860e9ff60247569f7fcd36a225b53.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

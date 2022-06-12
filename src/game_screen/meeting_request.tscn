@@ -141,4 +141,7 @@ margin_bottom = 13.0
 texture = SubResource( 1 )
 stretch_mode = 4
 
+[node name="SfxPlayer" type="AudioStreamPlayer" parent="."]
+bus = "Sfx"
+
 [connection signal="gui_input" from="." to="." method="_on_MeetingRequest_gui_input"]

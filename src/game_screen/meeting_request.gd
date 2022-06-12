@@ -20,6 +20,7 @@ onready var _title_label: Label = $"MarginContainer/VBoxContainer/TitleLabel"
 onready var _duration_label: Label = $"MarginContainer/VBoxContainer/HBoxContainer/DurationLabel"
 onready var _icon: TextureRect = $"MarginContainer/VBoxContainer/HBoxContainer/Icon"
 onready var _expiration_progress: TextureProgress = $"ExpirationProgress"
+onready var _sfx_player: AudioStreamPlayer = $"SfxPlayer"
 
 func _ready() -> void:
 	set_meeting(meeting)
@@ -36,8 +37,12 @@ func _process(delta: float) -> void:
 		_expiration_progress.material.set_shader_param("shake_strength", shake_strength)
 		_background.material.set_shader_param("shake_strength", shake_strength)
 	elif is_expiring:
-		emit_signal("expired", self)
 		set_is_expiring(false)
+		_sfx_player.stream = preload("res://assets/sound/expire1.wav")
+		_sfx_player.play()
+		yield(_sfx_player, "finished")
+		emit_signal("expired", self)
+		
 
 	if rect_position != target_position and not is_static:
 		if (target_position - rect_position).length_squared() <= 2:

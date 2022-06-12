@@ -80,3 +80,9 @@ margin_right = 54.0
 margin_bottom = 31.0
 custom_fonts/font = ExtResource( 7 )
 text = "WEEK 1"
+align = 1
+
+[node name="SfxPlayer" type="AudioStreamPlayer" parent="."]
+bus = "Sfx"
+
+[node name="WeekEndTween" type="Tween" parent="."]
