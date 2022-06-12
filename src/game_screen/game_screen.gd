@@ -5,35 +5,53 @@ const DAY_COUNT: int = 5
 const SLOT_COUNT: int = 18
 const TOTAL_SLOT_COUNT = DAY_COUNT * SLOT_COUNT
 
-export(float) var time_speed = 1.0 / 90.0 / 2  # % per second
+export(float) var time_speed = 1.0 / TOTAL_SLOT_COUNT / 2.0 # % per second
 export(float) var tick_interval = 1.0 # seconds
 
 onready var _gui = $"Gui"
 onready var _cursor: Control = $"Cursor"
 onready var _meeting_queue: Control = $"MeetingQueueMargin/MeetingQueue"
-onready var _calendar: Control = $"Calendar"
+onready var _calendars: Array = [$"Calendar", $"Calendar2"]
 onready var _week_label: Label = $"WeekLabel"
 onready var _time_shroud: TimeShroud = $"TimeShroud"
 onready var _sfx_player: AudioStreamPlayer = $"SfxPlayer"
+onready var _calendar: Control = _calendars[0]
+onready var _week_end_tween: Tween = $"WeekEndTween"
 
 var _time = 0
+var _is_time_progressing = true
 var _week_number = 1
 var _is_dragging = false
 var _current_request: MeetingRequest = null
 var _pending_requests: Array = []
 var _slots: Array = []
 var _time_since_tick = 0.0
+var _current_calendar = 0
 
 func _ready() -> void:
+	_week_label.text = tr("ui_week_label") % [_week_number]
 	_slots.resize(TOTAL_SLOT_COUNT)
 	create_request()
 
 
 func _process(delta):
-	_time += delta * time_speed
-	_time_shroud.progress = _time
-	
-	_time_since_tick += delta
+	# TODO: for testing, remove later
+	if Input.is_action_pressed("right"):
+		time_speed = 0.2
+	else:
+		time_speed = 1.0 / TOTAL_SLOT_COUNT / 2.0
+
+	if _is_time_progressing:
+		_time += delta * time_speed
+		_time_shroud.progress = _time
+		_time_since_tick += delta
+		
+		if _time >= 1.0:
+			_time = 0.0
+			_time_shroud.progress = 0.0
+			_is_time_progressing = false
+			_end_week()
+
 	if _time_since_tick >= tick_interval:
 		_time_since_tick = 0.0
 		if randi() % 5 >= _pending_requests.size():
@@ -44,6 +62,10 @@ func _process(delta):
 	
 	if _is_dragging:
 		_cursor.rect_global_position = _snap(get_global_mouse_position())
+
+
+func get_calendar() -> Control:
+	return _calendars[_current_calendar % _calendars.size()]
 
 
 func create_request() -> void:
@@ -102,6 +124,45 @@ func can_place_request(request: MeetingRequest, slot: Vector2) -> bool:
 			return false
 
 	return true
+
+
+func _end_week() -> void:
+	var prev_calendar = get_calendar()
+	_current_calendar = (_current_calendar + 1) % _calendars.size()
+	_calendar = get_calendar()
+	
+	_calendar.rect_position.x = rect_size.x
+	_week_end_tween \
+		.interpolate_property(prev_calendar, \
+			"rect_position", \
+			prev_calendar.rect_position, \
+			Vector2(-prev_calendar.rect_size.x, \
+			 	prev_calendar.rect_position.y), \
+			0.75, Tween.TRANS_BACK)
+	_week_end_tween \
+		.interpolate_property(_calendar, \
+			"rect_position", \
+			_calendar.rect_position, \
+			Vector2(0, \
+			 	_calendar.rect_position.y), \
+			0.75, Tween.TRANS_BACK)
+	_week_end_tween.start()
+	
+	yield(_week_end_tween, "tween_all_completed")
+
+	for n in prev_calendar.get_children():
+		n.queue_free()
+	
+	for i in range(_slots.size()):
+		_slots[i] = null
+
+	_week_number += 1
+	_start_week()
+
+
+func _start_week() -> void:
+	_week_label.text = tr("ui_week_label") % [_week_number]
+	_is_time_progressing = true
 
 
 func _drag_cursor_start(request: MeetingRequest) -> void:
