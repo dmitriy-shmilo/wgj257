@@ -114,7 +114,11 @@ func can_place_request(request: MeetingRequest, slot: Vector2) -> bool:
 	var index = _to_slot_index(slot)
 	var lane = index / SLOT_COUNT
 
+	if request.slot.x >= 0 and float(_to_slot_index(request.slot)) / TOTAL_SLOT_COUNT <= _time:
+		return false
 	if float(index) / TOTAL_SLOT_COUNT <= _time:
+		return false
+	if index + request.meeting.duration >= _slots.size():
 		return false
 
 	for i in range(request.meeting.duration):
@@ -127,6 +131,9 @@ func can_place_request(request: MeetingRequest, slot: Vector2) -> bool:
 
 
 func _end_week() -> void:
+	for req in _pending_requests:
+		req.is_expiring = false
+
 	var prev_calendar = get_calendar()
 	_current_calendar = (_current_calendar + 1) % _calendars.size()
 	_calendar = get_calendar()
@@ -155,6 +162,9 @@ func _end_week() -> void:
 	
 	for i in range(_slots.size()):
 		_slots[i] = null
+	
+	for req in _pending_requests:
+		req.is_expiring = true
 
 	_week_number += 1
 	_start_week()
@@ -252,6 +262,10 @@ func _on_meeting_request_gui_input(event: InputEvent, request: MeetingRequest) -
 
 
 func _on_meeting_request_expired(request: MeetingRequest) -> void:
+	if _cursor.meeting == request.meeting:
+		_is_dragging = false
+		_cursor.visible = false
+		_current_request = null
+
 	_remove_from_pending(request)
-	request.queue_free()
 

@@ -40,9 +40,9 @@ func _process(delta: float) -> void:
 		set_is_expiring(false)
 		_sfx_player.stream = preload("res://assets/sound/expire1.wav")
 		_sfx_player.play()
-		yield(_sfx_player, "finished")
 		emit_signal("expired", self)
-		
+		yield(_sfx_player, "finished")
+		queue_free()
 
 	if rect_position != target_position and not is_static:
 		if (target_position - rect_position).length_squared() <= 2:
