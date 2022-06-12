@@ -4,6 +4,8 @@ const MEETING_REQUEST_SCENE = preload("res://game_screen/meeting_request.tscn")
 const DAY_COUNT: int = 5
 const SLOT_COUNT: int = 18
 const TOTAL_SLOT_COUNT = DAY_COUNT * SLOT_COUNT
+const MOOD_RESTORATION_RATE = 1.0 # per second
+const MOOD_DECREASE_RATE = 1.0 # per second
 
 export(float) var time_speed = 1.0 / TOTAL_SLOT_COUNT / 2.0 # % per second
 export(float) var tick_interval = 1.0 # seconds
@@ -12,11 +14,11 @@ onready var _gui = $"Gui"
 onready var _cursor: Control = $"Cursor"
 onready var _meeting_queue: Control = $"MeetingQueueMargin/MeetingQueue"
 onready var _calendars: Array = [$"Calendar", $"Calendar2"]
-onready var _week_label: Label = $"WeekLabel"
 onready var _time_shroud: TimeShroud = $"TimeShroud"
 onready var _sfx_player: AudioStreamPlayer = $"SfxPlayer"
 onready var _calendar: Control = _calendars[0]
 onready var _week_end_tween: Tween = $"WeekEndTween"
+onready var _hud: Hud = $"Top/Hud"
 
 var _time = 0
 var _is_time_progressing = true
@@ -27,9 +29,11 @@ var _pending_requests: Array = []
 var _slots: Array = []
 var _time_since_tick = 0.0
 var _current_calendar = 0
+var _current_day = 0
+
 
 func _ready() -> void:
-	_week_label.text = tr("ui_week_label") % [_week_number]
+	_hud.set_current_week(_week_number)
 	_slots.resize(TOTAL_SLOT_COUNT)
 	create_request()
 
@@ -42,13 +46,30 @@ func _process(delta):
 		time_speed = 1.0 / TOTAL_SLOT_COUNT / 2.0
 
 	if _is_time_progressing:
+		if get_request() != null:
+			_hud.mood_modifier = Hud.MoodModifier.DOWN
+			_hud.current_mood -= MOOD_DECREASE_RATE * delta
+		elif _hud.current_mood < _hud.max_mood:
+			_hud.mood_modifier = Hud.MoodModifier.UP
+			_hud.current_mood += MOOD_RESTORATION_RATE * delta
+		else:
+			_hud.mood_modifier = Hud.MoodModifier.NONE
+
+		if _current_request != null and _current_request.slot.x >= 0 and float(_to_slot_index(_current_request.slot)) / TOTAL_SLOT_COUNT <= _time:
+			_release_current_request()
+			_sfx_player.stream = preload("res://assets/sound/fail2.wav")
+			_sfx_player.play()
+
 		_time += delta * time_speed
 		_time_shroud.progress = _time
 		_time_since_tick += delta
-		
+
+		if float(_current_day + 1) / DAY_COUNT <= _time:
+			_current_day += 1
+			_end_day()
+
 		if _time >= 1.0:
-			_time = 0.0
-			_time_shroud.progress = 0.0
+			_reset_time()
 			_is_time_progressing = false
 			_end_week()
 
@@ -62,6 +83,11 @@ func _process(delta):
 	
 	if _is_dragging:
 		_cursor.rect_global_position = _snap(get_global_mouse_position())
+		
+
+func get_request() -> MeetingRequest:
+	var index = floor(TOTAL_SLOT_COUNT * _time)
+	return _slots[index]
 
 
 func get_calendar() -> Control:
@@ -110,8 +136,16 @@ func place_request(request: MeetingRequest, slot: Vector2) -> void:
 	request.rect_global_position = _cursor.rect_global_position
 
 
-func can_place_request(request: MeetingRequest, slot: Vector2) -> bool:
-	var index = _to_slot_index(slot)
+func can_place_request(request: MeetingRequest) -> bool:
+	var cursor_pos = _cursor.rect_position
+	var cal_rect = Rect2(_calendar.rect_position, _calendar.rect_size)
+	var success = false
+	
+	if not cal_rect.has_point(cursor_pos):
+		return false
+
+	var slot_pos = _to_slot_position(_cursor.rect_position)
+	var index = _to_slot_index(slot_pos)
 	var lane = index / SLOT_COUNT
 
 	if request.slot.x >= 0 and float(_to_slot_index(request.slot)) / TOTAL_SLOT_COUNT <= _time:
@@ -128,6 +162,17 @@ func can_place_request(request: MeetingRequest, slot: Vector2) -> bool:
 			return false
 
 	return true
+
+
+func _reset_time() -> void:
+	_time = 0.0
+	_time_shroud.progress = 0.0
+	_current_day = 0
+
+
+func _end_day() -> void:
+	_hud.current_mood += _hud.max_mood / DAY_COUNT
+	_hud.current_score += 5
 
 
 func _end_week() -> void:
@@ -171,7 +216,7 @@ func _end_week() -> void:
 
 
 func _start_week() -> void:
-	_week_label.text = tr("ui_week_label") % [_week_number]
+	_hud.set_current_week(_week_number)
 	_is_time_progressing = true
 
 
@@ -192,22 +237,20 @@ func _drag_cursor_start(request: MeetingRequest) -> void:
 	_sfx_player.stream = preload("res://assets/sound/take1.wav")
 	_sfx_player.play()
 
-
-func _drag_cursor_end(request) -> void:
-	var cursor_pos = _cursor.rect_position
-	var cal_rect = Rect2(_calendar.rect_position, _calendar.rect_size)
-	var success = false
-	
-	if cal_rect.has_point(cursor_pos):
-		var slot_pos = _to_slot_position(_cursor.rect_position)
-		if can_place_request(request, slot_pos):
-			place_request(request, slot_pos)
-			success = true
-
+func _release_current_request() -> void:
 	_current_request.is_selected = false
 	_cursor.visible = false
 	_is_dragging = false
 	_current_request = null
+
+
+func _drag_cursor_end(request) -> void:
+	var success = false
+	if can_place_request(request):
+		place_request(request, _to_slot_position(_cursor.rect_position))
+		success = true
+
+	_release_current_request()
 
 	if success:
 		_sfx_player.stream = preload("res://assets/sound/put1.wav")
@@ -263,9 +306,7 @@ func _on_meeting_request_gui_input(event: InputEvent, request: MeetingRequest) -
 
 func _on_meeting_request_expired(request: MeetingRequest) -> void:
 	if _cursor.meeting == request.meeting:
-		_is_dragging = false
-		_cursor.visible = false
-		_current_request = null
+		_release_current_request()
 
 	_remove_from_pending(request)
 

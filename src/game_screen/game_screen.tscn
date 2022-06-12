@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://game_screen/game_screen.gd" type="Script" id=1]
 [ext_resource path="res://game_screen/gui.tscn" type="PackedScene" id=2]
@@ -8,17 +8,90 @@
 [ext_resource path="res://game_screen/calendar.gd" type="Script" id=6]
 [ext_resource path="res://ui/font_h2.tres" type="DynamicFont" id=7]
 [ext_resource path="res://game_screen/time_shroud.gd" type="Script" id=8]
+[ext_resource path="res://ui/font_small.tres" type="DynamicFont" id=9]
+[ext_resource path="res://assets/texture/icon_mood_up.tres" type="Texture" id=10]
+[ext_resource path="res://assets/texture/icon_score.tres" type="Texture" id=11]
+[ext_resource path="res://game_screen/hud.gd" type="Script" id=12]
+[ext_resource path="res://util/shaker.tscn" type="PackedScene" id=13]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 3 )
 region = Rect2( 0, 32, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 3 )
+region = Rect2( 17, 33, 15, 15 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 3 )
+region = Rect2( 45, 32, 5, 5 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 3 )
+region = Rect2( 32, 32, 5, 5 )
+
+[sub_resource type="Animation" id=5]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("MoodModifierIcon:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 116, 14 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("MoodModifierIcon2:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 121, 14 ) ]
+}
+
+[sub_resource type="Animation" id=6]
+resource_name = "default"
+length = 0.8
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("MoodModifierIcon:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( 116, 14 ), Vector2( 117, 14 ), Vector2( 118, 14 ), Vector2( 117, 14 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("MoodModifierIcon2:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( 122, 14 ), Vector2( 121, 14 ), Vector2( 122, 14 ), Vector2( 123, 14 ) ]
+}
 
 [node name="GameScreen" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 1 )
 
-[node name="BackgroundTop" type="NinePatchRect" parent="."]
+[node name="Top" type="NinePatchRect" parent="."]
 margin_right = 480.0
 margin_bottom = 32.0
 texture = SubResource( 1 )
@@ -27,35 +100,98 @@ patch_margin_top = 5
 patch_margin_right = 6
 patch_margin_bottom = 6
 
-[node name="BackgroundBottom" type="NinePatchRect" parent="."]
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_top = -42.0
+[node name="Hud" type="Control" parent="Top"]
 margin_right = 480.0
-texture = SubResource( 1 )
-patch_margin_left = 5
-patch_margin_top = 5
-patch_margin_right = 6
-patch_margin_bottom = 6
+margin_bottom = 32.0
+script = ExtResource( 12 )
+
+[node name="WeekLabel" type="Label" parent="Top/Hud"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -123.0
+margin_top = -7.0
+margin_right = 123.0
+margin_bottom = 32.0
+custom_fonts/font = ExtResource( 7 )
+text = "WEEK 1"
+align = 1
+
+[node name="MoodIcon" type="TextureRect" parent="Top/Hud"]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = 10.0
+margin_top = -8.0
+margin_right = 25.0
+margin_bottom = 7.0
+texture = SubResource( 2 )
+
+[node name="MoodModifierIcon" type="TextureRect" parent="Top/Hud"]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = 116.0
+margin_top = -2.0
+margin_right = 120.0
+margin_bottom = 3.0
+texture = ExtResource( 10 )
+
+[node name="MoodModifierIcon2" type="TextureRect" parent="Top/Hud"]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = 121.0
+margin_top = -2.0
+margin_right = 125.0
+margin_bottom = 3.0
+texture = ExtResource( 10 )
+
+[node name="MoodProgress" type="TextureProgress" parent="Top/Hud"]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = 30.0
+margin_top = -4.0
+margin_right = 115.0
+margin_bottom = 5.0
+value = 10.0
+texture_under = SubResource( 4 )
+texture_progress = SubResource( 3 )
+nine_patch_stretch = true
+stretch_margin_left = 1
+stretch_margin_top = 1
+stretch_margin_right = 1
+stretch_margin_bottom = 1
+
+[node name="ScoreIcon" type="TextureRect" parent="Top/Hud"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -17.0
+margin_top = -5.0
+margin_right = -10.0
+margin_bottom = 4.0
+texture = ExtResource( 11 )
+
+[node name="ScoreLabel" type="Label" parent="Top/Hud"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -127.0
+margin_top = -8.0
+margin_right = -20.0
+margin_bottom = 5.0
+theme = ExtResource( 5 )
+custom_fonts/font = ExtResource( 9 )
+text = "0"
+align = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Top/Hud"]
+reset_on_save = false
+anims/RESET = SubResource( 5 )
+anims/default = SubResource( 6 )
+
+[node name="Shaker" parent="Top/Hud" instance=ExtResource( 13 )]
 
 [node name="Gui" parent="." instance=ExtResource( 2 )]
-
-[node name="MeetingQueueMargin" type="MarginContainer" parent="."]
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_top = -40.0
-margin_right = 480.0
-custom_constants/margin_right = 2
-custom_constants/margin_top = 2
-custom_constants/margin_left = 2
-custom_constants/margin_bottom = 2
-
-[node name="MeetingQueue" type="Control" parent="MeetingQueueMargin"]
-margin_left = 2.0
-margin_top = 2.0
-margin_right = 478.0
-margin_bottom = 38.0
-theme = ExtResource( 5 )
 
 [node name="Calendar" type="Control" parent="."]
 margin_top = 32.0
@@ -66,6 +202,7 @@ lane_delimeter_color = Color( 0.341176, 0.447059, 0.466667, 1 )
 slot_delimeter_color = Color( 0.309804, 0.560784, 0.729412, 1 )
 slot_alt_delimeter_color = Color( 0.780392, 0.811765, 0.8, 1 )
 background_color = Color( 0.921569, 0.929412, 0.913725, 1 )
+reserve_background_color = Color( 0.75, 0.75, 0.75, 1 )
 
 [node name="NinePatchRect2" type="NinePatchRect" parent="Calendar"]
 visible = false
@@ -88,6 +225,7 @@ lane_delimeter_color = Color( 0.341176, 0.447059, 0.466667, 1 )
 slot_delimeter_color = Color( 0.309804, 0.560784, 0.729412, 1 )
 slot_alt_delimeter_color = Color( 0.780392, 0.811765, 0.8, 1 )
 background_color = Color( 0.921569, 0.929412, 0.913725, 1 )
+reserve_background_color = Color( 0.75, 0.75, 0.75, 1 )
 
 [node name="NinePatchRect2" type="NinePatchRect" parent="Calendar2"]
 visible = false
@@ -109,6 +247,34 @@ script = ExtResource( 8 )
 progress = 0.5
 color = Color( 0, 0, 0, 0.501961 )
 
+[node name="Bottom" type="NinePatchRect" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -42.0
+margin_right = 480.0
+texture = SubResource( 1 )
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="MeetingQueueMargin" type="MarginContainer" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -40.0
+margin_right = 480.0
+custom_constants/margin_right = 2
+custom_constants/margin_top = 2
+custom_constants/margin_left = 2
+custom_constants/margin_bottom = 2
+
+[node name="MeetingQueue" type="Control" parent="MeetingQueueMargin"]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 478.0
+margin_bottom = 38.0
+theme = ExtResource( 5 )
+
 [node name="Cursor" parent="." instance=ExtResource( 4 )]
 visible = false
 margin_top = 32.0
@@ -116,17 +282,6 @@ margin_right = 96.0
 margin_bottom = 64.0
 is_resizing = true
 is_static = true
-
-[node name="WeekLabel" type="Label" parent="."]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -123.0
-margin_top = -7.0
-margin_right = 123.0
-margin_bottom = 32.0
-custom_fonts/font = ExtResource( 7 )
-text = "WEEK 1"
-align = 1
 
 [node name="SfxPlayer" type="AudioStreamPlayer" parent="."]
 bus = "Sfx"
