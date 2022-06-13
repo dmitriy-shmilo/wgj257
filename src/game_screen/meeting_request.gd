@@ -70,9 +70,14 @@ func _process(delta: float) -> void:
 func set_is_resizing(value: bool) -> void:
 	is_resizing = value
 	if meeting != null and is_inside_tree():
-		_duration_label.get_parent().visible = meeting.duration > 1
-		rect_size.y = meeting.duration * row_height
-		rect_size.x = column_width
+		if value:
+			_duration_label.get_parent().visible = meeting.duration > 1
+			rect_size.y = meeting.duration * row_height
+			rect_size.x = column_width
+		else:
+			_duration_label.get_parent().visible = true
+			rect_size.y = 2 * row_height
+			rect_size.x = column_width
 
 
 func set_meeting(value: Meeting):

@@ -135,7 +135,7 @@ _global_script_class_icons={
 [application]
 
 config/name="wgj257"
-run/main_scene="res://title_screen/title_screen.tscn"
+run/main_scene="res://splash_screen/splash_screen.tscn"
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
 
@@ -151,7 +151,7 @@ window/size/width=640
 window/size/height=360
 window/size/test_width=720
 window/size/test_height=540
-window/stretch/mode="viewport"
+window/stretch/mode="2d"
 window/stretch/aspect="keep"
 
 [importer_defaults]

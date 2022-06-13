@@ -74,7 +74,7 @@ static func generate_easy(week: int) -> Meeting:
 			result.duration = 2
 			result.special = random_special_bad(week)
 		2:
-			result.duration =2
+			result.duration = 2
 			result.special = random_special_good(week)
 
 	return result
@@ -85,7 +85,7 @@ static func generate_medium(week: int) -> Meeting:
 	result.tint = MEDIUM_TINT_POOL.random_color()
 	match randi() % 3:
 		0:
-			result.duration = randi() % MAX_DURATION + EASY_DURATION_MODIFIER
+			result.duration = randi() % MAX_DURATION + MEDIUM_DURATION_MODIFIER
 			result.special = random_special_bad(week)
 		1:
 			result.duration = randi() % MAX_DURATION + MEDIUM_DURATION_MODIFIER
@@ -116,7 +116,7 @@ static func generate_hard(week: int) -> Meeting:
 
 
 static func generate_week(queue: Array, week_number: int, day_count: int, slots_per_day: int) -> Array:
-	var max_duration = day_count * slots_per_day / 2 + min(week_number, slots_per_day * 2) - day_count * 2
+	var max_duration = day_count * slots_per_day / 2 + min(week_number * 1.5, slots_per_day * 3) - day_count * 2
 	var duration = 0
 	
 	var specials = {}
