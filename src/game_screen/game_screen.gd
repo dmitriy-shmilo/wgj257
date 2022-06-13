@@ -47,20 +47,21 @@ var _intro_text = [
 	tr("txt_intro2"),
 	tr("txt_intro3")
 ]
-var _current_intro_text = -1
+var _current_intro_text = 0
 
 var _hints_pending = {
-	"txt_hint_payday" : true, 
-	"txt_hint_weekend" : true,
-	"txt_hint_time" : true,
-	"txt_hint_expiration" : true,
+	"txt_hint_payday" : true,  #
+	"txt_hint_weekend" : true, #
+	"txt_hint_time" : true, #
+	"txt_hint_expiration" : true, #
 	"txt_hint_no_reschedule" : true,
 	"txt_hint_important" : true,
 	"txt_hint_unimportant" : true,
 	"txt_hint_leisure" : true,
-	"txt_hint_free_time" : true,
-	"txt_hint_start" : true,
-	"txt_hint_reschedule" : true
+	"txt_hint_free_time" : true, #
+	"txt_hint_start" : true, #
+	"txt_hint_reschedule" : true, #
+	"txt_hint_in_progress" : true #
 }
 
 func _ready() -> void:
@@ -77,6 +78,7 @@ func _ready() -> void:
 	create_request(_current_queue.pop_back())
 	_show_intro()
 
+
 func _process(delta):
 	# TODO: for testing, remove later
 	if Input.is_action_pressed("right"):
@@ -86,7 +88,7 @@ func _process(delta):
 
 	if _is_time_progressing:
 		var current_item = get_request()
-
+				
 		if current_item is Pickup:
 			current_item.pick_up()
 
@@ -120,7 +122,7 @@ func _process(delta):
 
 		if _time >= 1.0:
 			_reset_time()
-			_is_time_progressing = false
+			_toggle_time(false)
 			_end_week()
 
 	if _time_since_tick >= tick_interval:
@@ -144,9 +146,15 @@ func _process(delta):
 		_cursor.is_selected = not can_place_request(_current_request)
 
 
+func _toggle_time(val: bool) -> void:
+	_is_time_progressing = val
+	for req in _pending_requests:
+		req.is_expiring = val
+
+
 func _show_intro() -> void:
-	_current_intro_text = 0
 	_show_dialog(_intro_text[0], false)
+	_current_intro_text = 1
 
 
 func get_request() -> Node:
@@ -284,9 +292,6 @@ func _end_week() -> void:
 	
 	_setup_pickups()
 
-	for req in _pending_requests:
-		req.is_expiring = true
-
 	_week_number += 1
 	_start_week()
 
@@ -298,7 +303,8 @@ func _start_week() -> void:
 
 	MeetingGenerator.generate_week(_current_queue, _week_number, DAY_COUNT, SLOT_COUNT)
 	_hud.set_current_week(_week_number)
-	_is_time_progressing = true
+	if not _dialog_popup.visible:
+		_toggle_time(true)
 
 
 func _setup_pickups() -> void:
@@ -321,6 +327,9 @@ func _drag_cursor_start(request: MeetingRequest) -> void:
 	if not request.is_expiring:
 		var index = _to_slot_index(request.slot)
 		if float(index) / TOTAL_SLOT_COUNT <= _time:
+			if _hints_pending["txt_hint_in_progress"] && Settings.enable_hints:
+				_show_dialog(tr("txt_hint_in_progress"), true, Dialog.Emotion.FROWN)
+				_hints_pending["txt_hint_in_progress"] = false
 			_sfx_player.stream = preload("res://assets/sound/fail2.wav")
 			_sfx_player.play()
 			return
@@ -348,7 +357,10 @@ func _drag_cursor_end(request) -> void:
 	if can_place_request(request):
 		place_request(request, _to_slot_position(_cursor.rect_position))
 		success = true
-
+	elif _to_slot_index(_to_slot_position(_cursor.rect_position)) < _time * TOTAL_SLOT_COUNT:
+		if _hints_pending["txt_hint_time"] and Settings.enable_hints:
+			_hints_pending["txt_hint_time"] = false
+			_show_dialog(tr("txt_hint_time") % [request.meeting.title], true, Dialog.Emotion.FROWN)
 	_release_current_request()
 
 	if success:
@@ -397,7 +409,7 @@ func _remove_from_pending(request: MeetingRequest) -> void:
 
 
 func _show_dialog(text: String, is_hint: bool = false, emotion: int = 0) -> void:
-	_is_time_progressing = false
+	_toggle_time(false)
 	_dialog_popup.visible = true
 	_dialog_popup.text = text
 	_dialog_popup.emotion = emotion
@@ -418,17 +430,27 @@ func _on_meeting_request_expired(request: MeetingRequest) -> void:
 	
 	_hud.current_mood -= EXPIRATION_PENALTY
 	_hud.shake_mood_meter()
+	
+	if _hints_pending["txt_hint_expiration"] && Settings.enable_hints:
+		_show_dialog(tr("txt_hint_expiration"), true, Dialog.Emotion.FROWN)
+		_hints_pending["txt_hint_expiration"] = false
 
 
 func _on_pickup_picked_up(sender: Pickup):
 	if sender.is_payday:
+		if _hints_pending["txt_hint_payday"] && Settings.enable_hints:
+			_show_dialog(tr("txt_hint_payday"), true, Dialog.Emotion.SMILE)
+			_hints_pending["txt_hint_payday"] = false
 		_hud.current_score += 5.00
 	if sender.is_mood_up:
+		if _hints_pending["txt_hint_weekend"] && Settings.enable_hints:
+			_show_dialog(tr("txt_hint_weekend"), true, Dialog.Emotion.SMILE)
+			_hints_pending["txt_hint_weekend"] = false
 		_hud.current_mood += 25
 
 
 func _on_Hud_mood_ran_out() -> void:
-	_is_time_progressing = false
+	_toggle_time(false)
 
 	_sfx_player.stream = preload("res://assets/sound/lose1.wav")
 	_sfx_player.play()
@@ -440,19 +462,20 @@ func _on_Hud_mood_ran_out() -> void:
 
 
 func _on_DialogPopup_disable_hints_pressed() -> void:
-	_is_time_progressing = true
+	_toggle_time(true)
 	_dialog_popup.visible = false
 	Settings.enable_hints = false
+	Settings.save_settings()
 
 
 func _on_DialogPopup_ok_pressed() -> void:
-	_is_time_progressing = true
+	_toggle_time(true)
 	_dialog_popup.visible = false
 	
-	if _current_intro_text < _intro_text.size() - 1:
-		_current_intro_text += 1
-		_show_dialog(_intro_text[_current_intro_text], false)
-	
-	if _current_intro_text == _intro_text.size() - 1 and Settings.enable_hints:
-		_current_intro_text += 1
+	if _current_intro_text == _intro_text.size() and Settings.enable_hints:
 		_show_dialog(tr("txt_hint_start"), true)
+		_current_intro_text += 1
+
+	if _current_intro_text < _intro_text.size():
+		_show_dialog(_intro_text[_current_intro_text], false)
+		_current_intro_text += 1

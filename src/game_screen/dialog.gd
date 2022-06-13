@@ -4,7 +4,8 @@ extends Control
 enum Emotion {
 	NORMAL,
 	FROWN,
-	YELL
+	YELL,
+	SMILE
 }
 
 export (Emotion) var emotion setget set_emotion
@@ -36,3 +37,5 @@ func set_emotion(val: int) -> void:
 				_portrait.frames = preload("res://assets/texture/boss_frowning.tres")
 			Emotion.YELL:
 				_portrait.frames = preload("res://assets/texture/boss_yelling.tres")
+			Emotion.SMILE:
+				_portrait.frames = preload("res://assets/texture/boss_smiling.tres")
