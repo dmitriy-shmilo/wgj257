@@ -1,51 +1,84 @@
 key,en,ru,uk
 _tr,Other localization,,
-txt_credits,Thank you for playing,Спасибо за то что играли,Дякуємо за те що грали
+txt_credits,"[font=res://ui/font_large.tres]Font[/font]
+- [url=https://datagoblin.itch.io/monogram]monogram[/url] by datagoblin
+
+[font=res://ui/font_large.tres]Music[/font]
+ - TBD
+
+[font=res://ui/font_large.tres]Art[/font]
+- Slightly modified [url=https://aivopiru.itch.io/pixelart-portrait-bases]Masculine_A[/url] portrait by Aivopiru.
+
+[font=res://ui/font_large.tres]Code[/font]
+- [url=https://dmitriy-shmilo.itch.io/]Dmitriy Shmilo[/url]
+- Game sources are avaiable on [url=https://github.com/dmitriy-shmilo/wgj257]github[/url]","[font=res://ui/font_large.tres]Шрифт[/font]
+- [url=https://datagoblin.itch.io/monogram]monogram[/url], автор datagoblin.
+
+[font=res://ui/font_large.tres]Музыка[/font]
+ - TBD
+
+[font=res://ui/font_large.tres]Арт[/font]
+- Слегка обработанный [url=https://aivopiru.itch.io/pixelart-portrait-bases]Masculine_A[/url] портрет, автор Aivopiru.
+
+[font=res://ui/font_large.tres]Код[/font]
+- [url=https://dmitriy-shmilo.itch.io/]Dmitriy Shmilo[/url].
+- Исходники доступны на [url=https://github.com/dmitriy-shmilo/wgj257]гитхабе[/url].","[font=res://ui/font_large.tres]Шрифт[/font]
+- [url=https://datagoblin.itch.io/monogram]monogram[/url], автор datagoblin.
+
+[font=res://ui/font_large.tres]Музика[/font]
+ - TBD
+
+[font=res://ui/font_large.tres]Арт[/font]
+- Злегка оброблений [url=https://aivopiru.itch.io/pixelart-portrait-bases]Masculine_A[/url] портрет, автор Aivopiru.
+
+[font=res://ui/font_large.tres]Код[/font]
+- [url=https://dmitriy-shmilo.itch.io/]Dmitriy Shmilo[/url].
+- Код доступний на [url=https://github.com/dmitriy-shmilo/wgj257]гітхабі[/url]."
 txt_tutorial,How to play,Как играть,Як грати
-txt_intro1,"Hello. Are you my new assistant? Welcome. My name is Mr. Cash Money, I'm an executive director at this fine establishment. I presume HR showed you around already? Good.",,
-txt_intro2,"Everybody in this company wants to book some time on my calendar, and it's your job to make sure I don't have to worry which meetings I'm supposed to be present on every week.",,
-txt_intro3,"It's not all meets and greets for me, though. I still do some actual work around here too. So do me a favor and make sure I don't get stuck in back-to-back calls every day. Even if it means I have to skip a meeting or two. Alright? Alright.",,
-txt_hint_payday,"I'm not the frugal type. Keep me productive, and I'll make sure you get some daily bonus ([img]res://assets/texture/icon_score.tres[/img]).",,
-txt_hint_weekend,I love Fridays! You know why? Because they end! A day-long golf session will surely help me relax after a week of hard work.,,
-txt_hint_time,"""We need this done yesterday"" are the words that I tell other people, not the other way around! How do you expect me to attend '%s' in the past?",,
-txt_hint_expiration,"It came to my attention that '%s' was supposed to happen some time this week, but you didn't allocate any of my time for it. I'll let it slide this time, but do make sure that I don't miss a lot of meetings. It's bad management.",,
-txt_hint_no_reschedule,"The guys running '%s' are quite busy ([img]res://assets/texture/icon_lock.tres[/img]). Once we decide the time, they won't agree to a reschedule.",,
-txt_hint_important,"It's extremely important ([img]res://assets/texture/icon_important.tres[/img]) that I attend this upcoming '%s'. Make sure it's on my radar, or I'm going to be REALLY upset.",,
-txt_hint_unimportant,"Ugh, '%s' is just clutter on my calendar ([img]res://assets/texture/icon_unimportant.tres[/img]). I bet nobody will even notice if I don't come.",,
-txt_hint_leisure,"Ooh, I love me some '%s' ([img]res://assets/texture/icon_leisure.tres[/img])! Really helps with stress management.",,
-txt_hint_free_time,"Meetings, calls, meetings, conferences! When am I supposed to do any actual work?! Leave some blank spaces on my calendar, so I can focus on important stuff!",,
-txt_hint_start,"Now. Let's get started, shall we? I know there's a couple of pending appointments already, waiting to be booked on my calendar. Just drag 'em up from the queue, and I'll attend them once the time comes.",,
-txt_hint_reschedule,"Feel free to move my appointments around the board even after they're placed. You can reschedule most of my meetings to give me some breathing room. Obviously you can't move an event, which happened in the past or happening right now!",,
-txt_hint_in_progress,What do you think you're doing? You can't reschedule '%s'! I'm already here!,,
-txt_hint_important_expiration,Why did I miss '%s'? It was extremely important ([img]res://assets/texture/icon_important.tres[/img]) for me to be there!,,
-txt_hint_in_advance,"We need some prep work for '%s', so it can't be conducted today ([img]res://assets/texture/icon_advance.tres[/img]). Make sure to schedule it at least one day in advance.",,
-meeting_1,Call from Dmitriy,,
-meeting_2,Call from Irene,,
-meeting_3,Call from Gabriel,,
-meeting_4,R&D meeting,,
-meeting_5,Call from HR,,
-meeting_6,Promotion discussion,,
-meeting_7,Release review,,
-meeting_8,Meeting with sales dpt.,,
-meeting_9,New hire intro,,
-meeting_10,Sales report,,
-meeting_unimportant_1,Status update,,
-meeting_unimportant_2,Sensitivity training,,
-meeting_unimportant_3,Teambuild session,,
-meeting_important_1,Big customer pitch,,
-meeting_important_2,Big customer issue,,
-meeting_important_3,System downtime,,
-meeting_important_4,Board meeting,,
-meeting_important_5,Monthly report,,
-meeting_important_6,Quaterly report,,
-meeting_leisure_1,Sales party,,
-meeting_leisure_2,Business lunch,,
-meeting_leisure_3,Diversity celebration,,
-meeting_leisure_4,Conference afterparty,,
-meeting_leisure_5,Group meditation ,,
-meeting_no_reschedule_1,Design call,,
-meeting_no_reschedule_2,Release demo,,
-meeting_no_reschedule_3,Security training,,
-meeting_advance_1,Big customer onboarding,,
-meeting_advance_2,On-site presentation,,
-meeting_advance_3,Feature presentation,,
+txt_intro1,"Hello. Are you my new assistant? Welcome. My name is Mr. Cash Money, I'm an executive director at this fine establishment. I presume HR showed you around already? Good.","Здравствуйте. Вы мой новый ассистент? Добро пожаловать. Мея зовут мистер Кэш Мани, я исполнительный директор этого чудесного предприятия. Полагаю, кто-то из отдела кадров уже вам все показал? Отлично.","Вітаю. Ви мій новий ассистент? Ласкаво прошу. Мене звати містер Кеш Мані, я виконавчий директор цього чудового підприємства. Гадаю, хтось із відділу кадрів вже вам все показав? Добре."
+txt_intro2,"Everybody in this company wants to book some time on my calendar, and it's your job to make sure I don't have to worry which meetings I'm supposed to be present on every week.","В этой компании каждый человек хочет зарезервировать немного времени в моем календаре, а ваша работа заключается в том чтобы решить на каких митингах я буду присутствовать каждую неделю.","В цій компанії кожна людина бажає зарезервувати трошки часу в моєму календарі, а ваша робота полягає в тому щоб вирішити на яких мітингах я буду присутній кожен тиждень."
+txt_intro3,"It's not all meets and greets for me, though. I still do some actual work around here too. So do me a favor and make sure I don't get stuck in back-to-back calls every day. Even if it means I have to skip a meeting or two. Alright? Alright.","Но я не только просиживаю штаны на звонках и встречах. Я еще и выполняю кое-какую работу. Так что сделайте мне отдолжение и позаботьтесь чтоб я не торчал на встречах сплошными днями. Если мне придется пропустить звонок-другой, то так тому и быть. Договорились? Договорились.","Але я не тільки просиджую штани на дзвінках та зустрічах. Я ще й виконую деяку роботу. Так що зробіть мені послугу і потурбуйтесь щоб я не торчав на зустрічах цілими днями. Якщо мені доведеться пропустити дзвінок або два, то так тому й бути. Домовились? Домовились."
+txt_hint_payday,"I'm not the frugal type. Keep me productive, and I'll make sure you get some daily bonus ([img]res://assets/texture/icon_score.tres[/img]).","Я не скупердяй. Побеспокойтесь о моей продуктивности, а я побеспокоюсь о том чтобы вы получали ежедневный бонус ([img]res://assets/texture/icon_score.tres[/img]).","Я не скупий. Подбайте про мою продуктивність, а я подбаю про те, щоб ви отримували щоденний бонус ([img]res://assets/texture/icon_score.tres[/img])."
+txt_hint_weekend,I love Fridays! You know why? Because they end! A day-long golf session will surely help me relax after a week of hard work.,Обожаю пятницы! Знаете почему? Потому что они заканчиваются. Субботний денек игры в гольф однозначно поможет мне расслабиться после тяжелой рабочей недели.,"Обожнюю п'ятниці! Знаєте, чому? Тому що вони закінчуються. Суботній день гри в гольф допоможе мені розслабитися після важкого робочого тижня."
+txt_hint_time,"""We need this done yesterday"" are the words that I tell other people, not the other way around! How do you expect me to attend '%s' in the past?","В этой компании я говорю ""это должно быть сделано вчера"", а не мне! Каким образом я должен посетить '%s' в прошлом?","У цій компанії я говорю ""це має бути зроблено вчора"", а не мені! Яким чином я маю відвідати '%s' у минулому?"
+txt_hint_expiration,"It came to my attention that '%s' was supposed to happen some time this week, but you didn't allocate any of my time for it. I'll let it slide this time, but do make sure that I don't miss a lot of meetings. It's bad management.","Мне сообщили что  '%s' должен был быть запланирован на этой неделе, но вы не выделили моего времени на эту встречу. На первый раз прощаю, но побеспокойтесь чтоб я не пропускал слишком много встреч в будущем.","Мені повідомили що '%s' повинен був бути запланований цього тижня, але ви не виділили мого часу на цю зустріч. Вперше прощаю, але подбайте щоб я не пропускав занадто багато зустрічей у майбутньому."
+txt_hint_no_reschedule,"The guys running '%s' are quite busy ([img]res://assets/texture/icon_lock.tres[/img]). Once we decide the time, they won't agree to a reschedule.","Парни, которые проводят '%s' довольно занятые люди ([img]res://assets/texture/icon_lock.tres[/img]). Как только мы определимся со временем, они больше не согласятся переносить встречу.","Хлопці, які проводять '%s' досить зайняті люди ([img] res://assets/texture/icon_lock.tres [/img]). Як тільки ми визначимося з часом, вони більше не погодяться переносити зустріч."
+txt_hint_important,"It's extremely important ([img]res://assets/texture/icon_important.tres[/img]) that I attend this upcoming '%s'. Make sure it's on my radar, or I'm going to be REALLY upset.","Очень важно ([img]res://assets/texture/icon_important.tres[/img]) чтоб я попал на этот '%s'. Побеспокойтесь чтоб эта встреча не потерялась, иначе я буду ОЧЕНЬ расстроен.","Дуже важливо ([img]res://assets/texture/icon_important.tres[/img]) щоб я потрапив на цей '%s'. Потурбуйтесь щоб ця зустріч не загубилася, інакше я буду ДУЖЕ засмучений."
+txt_hint_unimportant,"Ugh, '%s' is just clutter on my calendar ([img]res://assets/texture/icon_unimportant.tres[/img]). I bet nobody will even notice if I don't come.","Фу, '%s' - это просто мусор ([img]res://assets/texture/icon_unimportant.tres[/img])для моего календаря. Бьюсь об заклад что никто и не заметит если я пропущу этот раз.","Фу, '%s' - це просто сміття для мого календаря. Б'юся об заклад що ніхто і не помітить якщо я пропущу цей раз."
+txt_hint_leisure,"Ooh, I love me some '%s' ([img]res://assets/texture/icon_leisure.tres[/img])! Really helps with stress management.",'%s'! Обожаю! Очень помогает отвлечься и расслабиться ([img]res://assets/texture/icon_leisure.tres[/img]).,'%s'! Обожнюю! Дуже допомагає відволіктися та розслабитись ([img]res://assets/texture/icon_leisure.tres[/img]).
+txt_hint_free_time,"Meetings, calls, meetings, conferences! When am I supposed to do any actual work?! Leave some blank spaces on my calendar, so I can focus on important stuff!","Митиги, звонки, встречи, конференции! А работать я когда буду?! Оставьте мне хоть немного времени каждый день, чтоб я мог сосредоточиться на важных вещах!","Мітіги, дзвінки, зустрічі, конференції! А працювати я колись буду?! Залиште мені хоч трохи часу щодня, щоб я міг зосередитись на важливих речах!"
+txt_hint_start,"Now. Let's get started, shall we? I know there's a couple of pending appointments already, waiting to be booked on my calendar. Just drag 'em up from the queue, and I'll attend them once the time comes.","Итак, приступим. Я в курсе парочки встреч, которые должны случиться в блиайшее время. Просто перетащите их из очереди, а я посещу их когда придет время.","Отже, почнемо. Я в курсі декількох зустрічей, які мають статися найближчим часом. Просто перетягніть їх із черги, а я відвідаю їх коли настане час."
+txt_hint_reschedule,"Feel free to move my appointments around the board even after they're placed. You can reschedule most of my meetings to give me some breathing room. Obviously you can't move an event, which happened in the past or happening right now!","Не стесняйтесь переназначать встречи. Можете двигать их по моему календарю даже после того как они были назначены. Вы сможете изменить время почти любой встречи, если только она уже не случилась!","Не соромтеся змінювати час зустрічей. Можете рухати їх по моєму календареві навіть після того, як ви визначилися з їх часом. Ви зможете змінити час майже будь-якої зустрічі, якщо вона вже не трапилася!"
+txt_hint_in_progress,What do you think you're doing? You can't reschedule '%s'! I'm already here!,Вы что делаете? Нельзя переназначать '%s'! Я уже здесь!,Що ви робите? Не можна чіпати '%s'! Я вже тут!
+txt_hint_important_expiration,Why did I miss '%s'? It was extremely important ([img]res://assets/texture/icon_important.tres[/img]) for me to be there!,"Почему я пропустил '%s'? Это была очень важная ([img]res://assets/texture/icon_important.tres[/img]) встреча, я просто обязан был быть там!","Чому я пропустив '%s'? Це була дуже важлива ([img]res://assets/texture/icon_important.tres[/img]) зустріч, я просто повинен був бути там!"
+txt_hint_in_advance,"We need some prep work for '%s', so it can't be conducted today ([img]res://assets/texture/icon_advance.tres[/img]). Make sure to schedule it at least one day in advance.","Чтобы провести '%s' нужно будет немного подготовиться ([img]res://assets/texture/icon_advance.tres[/img]), так что не назначайте это событие на сегодня.","Щоб провести '%s', потрібно буде трохи підготуватися ([img]res://assets/texture/icon_advance.tres[/img]), так що не призначайте цю подію на сьогодні."
+meeting_1,Call with Dmitriy,Звонок с Дмитрием,Дзвінок із Дмитром
+meeting_2,Call with Irene,Звонок с Ириной,Дзвінок із Іриною
+meeting_3,Call with Gabriel,Звонок с Габриэлем,Дзвінок із Габріелем
+meeting_4,R&D meeting,Митинг с R&D,Мітинг з R&D
+meeting_5,Meeting with HR,Митинг с отд. кадров,Мітинг з від. кадрів
+meeting_6,Promotion discussion,Решение о повышении.,Рішення про підвищення.
+meeting_7,Release review,Релиз ревью,Реліз ревью
+meeting_8,Meeting with sales dpt.,Митинг с отд. продаж,Мітинг з від. продажів
+meeting_9,New hire intro,"Ориентация, новый сотрудник","Орієнтація, новий співробітник"
+meeting_10,Sales report,Репорт по продажам,Звіт про продажі
+meeting_unimportant_1,Status update,Статус апдейт,Статус апдейт
+meeting_unimportant_2,Sensitivity training,Поведенческий тренинг,Поведінковий тренінг
+meeting_unimportant_3,Teambuild session,Тимбилдинг,Тімбілдінг
+meeting_important_1,Big customer pitch,Предложение большому заказчику,Пропозиція великому замовнику
+meeting_important_2,Big customer issue,Проблема с большим заказчиком,Проблема з великим замовником
+meeting_important_3,System downtime,Простой системы,Простій системи
+meeting_important_4,Board meeting,Встреча директоров,Зустріч директорів
+meeting_important_5,Monthly report,Месячный отчет,Місячний звіт
+meeting_important_6,Quaterly report,Квартальный отчет,Квартальний звіт
+meeting_leisure_1,Sales party,Празднование продажи,Святкування продажу
+meeting_leisure_2,Business lunch,Бизнес-ланч,Бізнес-ланч
+meeting_leisure_3,Diversity celebration,Празднование культуры,Святкування культури
+meeting_leisure_4,Conference afterparty,Афтепати после конференции,Афтепаті після конференції
+meeting_leisure_5,Group meditation ,Груповая медитация,Групова медитація
+meeting_no_reschedule_1,Design call,Звонок с дизайнерами,Дзвінок із дизайнерами
+meeting_no_reschedule_2,Release demo,Демо,Демо
+meeting_no_reschedule_3,Security training,Тренинг по безопасности,Тренінг з безпеки
+meeting_advance_1,Big customer onboarding,Адаптация большого заказчика,Адаптація великого замовника
+meeting_advance_2,On-site presentation,Презентация на месте,Презентація на місці
+meeting_advance_3,Feature presentation,Презентация функционала,Презентація функціоналу
