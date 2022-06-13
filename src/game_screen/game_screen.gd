@@ -54,14 +54,16 @@ var _hints_pending = {
 	"txt_hint_weekend" : true, #
 	"txt_hint_time" : true, #
 	"txt_hint_expiration" : true, #
-	"txt_hint_no_reschedule" : true,
-	"txt_hint_important" : true,
-	"txt_hint_unimportant" : true,
-	"txt_hint_leisure" : true,
+	"txt_hint_no_reschedule" : true, #
+	"txt_hint_important" : true, #
+	"txt_hint_important_expiration" : true, #
+	"txt_hint_unimportant" : true, #
+	"txt_hint_leisure" : true, #
 	"txt_hint_free_time" : true, #
 	"txt_hint_start" : true, #
 	"txt_hint_reschedule" : true, #
-	"txt_hint_in_progress" : true #
+	"txt_hint_in_progress" : true, #
+	"txt_hint_in_advance" : true, #
 }
 
 func _ready() -> void:
@@ -93,14 +95,18 @@ func _process(delta):
 			current_item.pick_up()
 
 		if current_item is MeetingRequest:
-			_hud.mood_modifier = Hud.MoodModifier.DOWN
-			_hud.current_mood -= MOOD_DECREASE_RATE * delta
-			
-			if _hud.current_mood <= _hud.max_mood / 2 \
-				and Settings.enable_hints \
-				and _hints_pending["txt_hint_free_time"]:
-					_hints_pending["txt_hint_free_time"] = false
-					_show_dialog(tr("txt_hint_free_time"), true, Dialog.Emotion.FROWN)
+			if current_item.meeting.special == Meeting.Special.LEISURE:
+				_hud.mood_modifier = Hud.MoodModifier.DOUBLE_UP
+				_hud.current_mood += MOOD_RESTORATION_RATE * 2 * delta
+			else:
+				_hud.mood_modifier = Hud.MoodModifier.DOWN
+				_hud.current_mood -= MOOD_DECREASE_RATE * delta
+				
+				if _hud.current_mood <= _hud.max_mood / 2 \
+					and Settings.enable_hints \
+					and _hints_pending["txt_hint_free_time"]:
+						_hints_pending["txt_hint_free_time"] = false
+						_show_dialog(tr("txt_hint_free_time"), true, Dialog.Emotion.FROWN)
 		elif _hud.current_mood < _hud.max_mood:
 			_hud.mood_modifier = Hud.MoodModifier.UP
 			_hud.current_mood += MOOD_RESTORATION_RATE * delta
@@ -242,6 +248,13 @@ func can_place_request(request: MeetingRequest) -> bool:
 		if (index + i) % SLOT_COUNT == SLOT_COUNT - 1:
 			return false # padding hours, bottom
 
+	if request.meeting.special == Meeting.Special.IN_ADVANCE_ONLY:
+		var current_slot = int(_time * TOTAL_SLOT_COUNT)
+		var day = current_slot / SLOT_COUNT
+		var last_day_slot = (day + 1) * SLOT_COUNT
+		if index <= last_day_slot:
+			return false
+
 	return true
 
 
@@ -327,9 +340,14 @@ func _drag_cursor_start(request: MeetingRequest) -> void:
 	if not request.is_expiring:
 		var index = _to_slot_index(request.slot)
 		if float(index) / TOTAL_SLOT_COUNT <= _time:
-			if _hints_pending["txt_hint_in_progress"] && Settings.enable_hints:
-				_show_dialog(tr("txt_hint_in_progress"), true, Dialog.Emotion.FROWN)
+			if _hints_pending["txt_hint_in_progress"] and Settings.enable_hints:
+				_show_dialog(tr("txt_hint_in_progress") % [request.meeting.title], true, Dialog.Emotion.FROWN)
 				_hints_pending["txt_hint_in_progress"] = false
+			_sfx_player.stream = preload("res://assets/sound/fail2.wav")
+			_sfx_player.play()
+			return
+		
+		if request.is_static and request.meeting.special == Meeting.Special.NO_RESCHEDULE:
 			_sfx_player.stream = preload("res://assets/sound/fail2.wav")
 			_sfx_player.play()
 			return
@@ -375,7 +393,7 @@ func _setup_request(request: MeetingRequest):
 	_pending_requests.append(request)
 	request.connect("gui_input", self, "_on_meeting_request_gui_input", [request])
 	request.connect("expired", self, "_on_meeting_request_expired")
-
+	request.connect("stabilised", self, "_on_meeting_request_stabilised")
 
 func _snap(pos: Vector2) -> Vector2:
 	if pos.y <= _calendar.rect_position.y \
@@ -428,22 +446,62 @@ func _on_meeting_request_expired(request: MeetingRequest) -> void:
 		_release_current_request()
 	_remove_from_pending(request)
 	
-	_hud.current_mood -= EXPIRATION_PENALTY
-	_hud.shake_mood_meter()
 	
-	if _hints_pending["txt_hint_expiration"] && Settings.enable_hints:
-		_show_dialog(tr("txt_hint_expiration"), true, Dialog.Emotion.FROWN)
+	match request.meeting.special:
+		Meeting.Special.IMPORTANT:
+			_hud.current_mood -= EXPIRATION_PENALTY * 3
+			_hud.shake_mood_meter()
+		Meeting.Special.NOT_IMPORTANT, Meeting.Special.LEISURE:
+			pass
+		_:
+			_hud.current_mood -= EXPIRATION_PENALTY
+			_hud.shake_mood_meter()
+
+	if request.meeting.special == Meeting.Special.IMPORTANT and _hints_pending["txt_hint_important_expiration"] and Settings.enable_hints:
+		_show_dialog(tr("txt_hint_important_expiration") % [request.meeting.title], true, Dialog.Emotion.YELL)
+		_hints_pending["txt_hint_important_expiration"] = false
+	elif request.meeting.special != Meeting.Special.NOT_IMPORTANT \
+		and request.meeting.special != Meeting.Special.LEISURE \
+		and _hints_pending["txt_hint_expiration"] and Settings.enable_hints:
+		_show_dialog(tr("txt_hint_expiration") % [request.meeting.title], true, Dialog.Emotion.FROWN)
 		_hints_pending["txt_hint_expiration"] = false
+
+
+func _on_meeting_request_stabilised(request: MeetingRequest) -> void:
+	if request.meeting.special == Meeting.Special.IN_ADVANCE_ONLY:
+		if _hints_pending["txt_hint_in_advance"] and Settings.enable_hints:
+			_show_dialog(tr("txt_hint_in_advance") % [request.meeting.title], true, Dialog.Emotion.NORMAL)
+			_hints_pending["txt_hint_in_advance"] = false
+	
+	if request.meeting.special == Meeting.Special.NO_RESCHEDULE:
+		if _hints_pending["txt_hint_no_reschedule"] and Settings.enable_hints:
+			_show_dialog(tr("txt_hint_no_reschedule") % [request.meeting.title], true, Dialog.Emotion.NORMAL)
+			_hints_pending["txt_hint_no_reschedule"] = false
+	
+	if request.meeting.special == Meeting.Special.IMPORTANT:
+		if _hints_pending["txt_hint_important"] and Settings.enable_hints:
+			_show_dialog(tr("txt_hint_important") % [request.meeting.title], true, Dialog.Emotion.FROWN)
+			_hints_pending["txt_hint_important"] = false
+	
+	if request.meeting.special == Meeting.Special.LEISURE:
+		if _hints_pending["txt_hint_leisure"] and Settings.enable_hints:
+			_show_dialog(tr("txt_hint_leisure") % [request.meeting.title], true, Dialog.Emotion.SMILE)
+			_hints_pending["txt_hint_leisure"] = false
+	
+	if request.meeting.special == Meeting.Special.NOT_IMPORTANT:
+		if _hints_pending["txt_hint_unimportant"] and Settings.enable_hints:
+			_show_dialog(tr("txt_hint_unimportant") % [request.meeting.title], true, Dialog.Emotion.SMILE)
+			_hints_pending["txt_hint_unimportant"] = false
 
 
 func _on_pickup_picked_up(sender: Pickup):
 	if sender.is_payday:
-		if _hints_pending["txt_hint_payday"] && Settings.enable_hints:
+		if _hints_pending["txt_hint_payday"] and Settings.enable_hints:
 			_show_dialog(tr("txt_hint_payday"), true, Dialog.Emotion.SMILE)
 			_hints_pending["txt_hint_payday"] = false
 		_hud.current_score += 5.00
 	if sender.is_mood_up:
-		if _hints_pending["txt_hint_weekend"] && Settings.enable_hints:
+		if _hints_pending["txt_hint_weekend"] and Settings.enable_hints:
 			_show_dialog(tr("txt_hint_weekend"), true, Dialog.Emotion.SMILE)
 			_hints_pending["txt_hint_weekend"] = false
 		_hud.current_mood += 25

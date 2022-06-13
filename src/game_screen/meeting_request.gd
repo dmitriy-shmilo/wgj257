@@ -2,6 +2,7 @@ class_name MeetingRequest
 extends Control
 
 signal expired(sender)
+signal stabilised(sender)
 
 export(Resource) var meeting setget set_meeting
 export(bool) var is_resizing = false setget set_is_resizing
@@ -23,6 +24,8 @@ onready var _duration_label: Label = $"MarginContainer/VBoxContainer/HBoxContain
 onready var _icon: TextureRect = $"MarginContainer/VBoxContainer/HBoxContainer/Icon"
 onready var _expiration_progress: TextureProgress = $"ExpirationProgress"
 onready var _sfx_player: AudioStreamPlayer = $"SfxPlayer"
+
+var _is_stable = false
 
 func _ready() -> void:
 	set_meeting(meeting)
@@ -46,13 +49,20 @@ func _process(delta: float) -> void:
 		yield(_sfx_player, "finished")
 		queue_free()
 
-	if rect_position != target_position and not is_static:
-		if (target_position - rect_position).length_squared() <= 2:
-			rect_position = target_position
-			return
-		
-		var direction = (target_position - rect_position).normalized()
-		rect_position += direction * scroll_speed
+	if is_expiring:
+		if rect_position != target_position and not is_static:
+			if (target_position - rect_position).length_squared() <= 2:
+				rect_position = target_position
+				return
+			
+			var direction = (target_position - rect_position).normalized()
+			rect_position += direction * scroll_speed
+		elif not _is_stable:
+			_is_stable = true
+			emit_signal("stabilised", self)
+	elif is_static and not _is_stable:
+			_is_stable = true
+			emit_signal("stabilised", self)
 
 
 func set_is_resizing(value: bool) -> void:

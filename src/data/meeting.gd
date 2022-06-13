@@ -17,8 +17,10 @@ enum Special {
 const SPECIAL_TEXTURE_MAP = {
 	Special.NONE: null,
 	Special.NO_RESCHEDULE: preload("res://assets/texture/icon_lock.tres"),
-	Special.IMPORTANT: preload("res://assets/texture/icon_warning.tres"),
-	Special.LEISURE: preload("res://assets/texture/icon_heart.tres"),
+	Special.IN_ADVANCE_ONLY: preload("res://assets/texture/icon_advance.tres"),
+	Special.NOT_IMPORTANT: preload("res://assets/texture/icon_unimportant.tres"),
+	Special.IMPORTANT: preload("res://assets/texture/icon_important.tres"),
+	Special.LEISURE: preload("res://assets/texture/icon_leisure.tres"),
 }
 
 export(String) var title = "Title"
