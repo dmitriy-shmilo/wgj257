@@ -4,4 +4,4 @@
 
 [resource]
 script = ExtResource( 1 )
-strings = [ "action_call", "action_meeting", "action_sync_up" ]
+strings = [ "meeting_no_reschedule_1", "meeting_no_reschedule_2", "meeting_no_reschedule_3" ]

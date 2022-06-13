@@ -1,14 +1,12 @@
 class_name Meeting
 extends Resource
 
-const SHORT_TITLE_LENGTH = 14
+const SHORT_TITLE_LENGTH = 20
 
 enum Special {
 	NONE,
 	IMPORTANT,
 	NO_RESCHEDULE,
-	SECOND_HALF_ONLY,
-	FIRST_HALF_ONLY,
 	IN_ADVANCE_ONLY,
 	LEISURE,
 	NOT_IMPORTANT,

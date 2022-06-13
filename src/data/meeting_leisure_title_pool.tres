@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://data/string_pool.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+strings = [ "meeting_leisure_1", "meeting_leisure_2", "meeting_leisure_3", "meeting_leisure_4", "meeting_leisure_5" ]
