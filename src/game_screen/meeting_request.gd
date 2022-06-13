@@ -30,6 +30,7 @@ var _is_stable = false
 
 func _ready() -> void:
 	set_meeting(meeting)
+	set_is_resizing(is_resizing)
 
 
 func _process(delta: float) -> void:

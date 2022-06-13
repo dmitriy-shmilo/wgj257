@@ -18,25 +18,23 @@ __meta__ = {
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 48.0
-margin_top = 31.0
 margin_right = -48.9985
 margin_bottom = -10.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
+custom_constants/separation = 8
 
 [node name="TitleLabel" type="Label" parent="VBoxContainer"]
 margin_right = 543.0
 margin_bottom = 26.0
+custom_colors/font_color = Color( 0.909804, 0.756863, 0.439216, 1 )
 text = "ui_settings"
 align = 1
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
-margin_top = 30.0
+margin_top = 34.0
 margin_right = 543.0
-margin_bottom = 275.0
+margin_bottom = 302.0
 size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
@@ -46,7 +44,7 @@ __meta__ = {
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 536.0
-margin_bottom = 238.0
+margin_bottom = 261.0
 
 [node name="SoundSettings" type="Control" parent="VBoxContainer/PanelContainer/TabContainer"]
 anchor_right = 1.0
@@ -148,19 +146,12 @@ margin_right = -7.0
 margin_bottom = -7.0
 
 [node name="Container" type="VBoxContainer" parent="VBoxContainer/PanelContainer/TabContainer/LanguageSettings"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -150.0
-margin_top = -28.0
-margin_right = 150.0
-margin_bottom = 28.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 68.0
+margin_right = -68.0
 size_flags_vertical = 3
 alignment = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="OtherSettings" type="ScrollContainer" parent="VBoxContainer/PanelContainer/TabContainer"]
 visible = false
@@ -172,10 +163,10 @@ margin_right = -7.0
 margin_bottom = -7.0
 
 [node name="Container" type="VBoxContainer" parent="VBoxContainer/PanelContainer/TabContainer/OtherSettings"]
-margin_left = 169.0
-margin_top = 75.0
-margin_right = 345.0
-margin_bottom = 101.0
+margin_left = 121.0
+margin_top = 40.0
+margin_right = 393.0
+margin_bottom = 158.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 custom_constants/separation = 20
@@ -185,25 +176,27 @@ __meta__ = {
 }
 
 [node name="FullscreenCheckbox" type="CheckBox" parent="VBoxContainer/PanelContainer/TabContainer/OtherSettings/Container"]
-margin_right = 176.0
+margin_right = 272.0
 margin_bottom = 26.0
 text = "ui_fullscreen"
 
 [node name="HintsCheckbox" type="CheckBox" parent="VBoxContainer/PanelContainer/TabContainer/OtherSettings/Container"]
-margin_right = 176.0
-margin_bottom = 26.0
+margin_top = 46.0
+margin_right = 272.0
+margin_bottom = 72.0
 text = "ui_enable_hints"
 
 [node name="ScreenshakeCheckbox" type="CheckBox" parent="VBoxContainer/PanelContainer/TabContainer/OtherSettings/Container"]
-margin_right = 176.0
-margin_bottom = 26.0
+margin_top = 92.0
+margin_right = 272.0
+margin_bottom = 118.0
 text = "ui_enable_screenshake"
 
 [node name="BackToTitleButton" type="Button" parent="VBoxContainer"]
 margin_left = 168.0
-margin_top = 279.0
+margin_top = 310.0
 margin_right = 374.0
-margin_bottom = 319.0
+margin_bottom = 350.0
 size_flags_horizontal = 4
 shortcut_in_tooltip = false
 shortcut = ExtResource( 2 )

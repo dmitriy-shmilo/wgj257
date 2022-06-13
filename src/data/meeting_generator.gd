@@ -2,9 +2,9 @@ class_name MeetingGenerator
 extends Reference
 
 const MAX_DURATION = 2
-const EASY_DURATION_MODIFIER = 2
-const MEDIUM_DURATION_MODIFIER = 4
-const HARD_DURATION_MODIFIER = 6
+const EASY_DURATION_MODIFIER = 1
+const MEDIUM_DURATION_MODIFIER = 2
+const HARD_DURATION_MODIFIER = 4
 
 const MEETING_TITLE_POOL: StringPool = preload("res://data/meeting_title_pool.tres")
 const NO_RESCHEDULE_MEETING_TITLE_POOL: StringPool = preload("res://data/meeting_no_reschedule_title_pool.tres")
@@ -42,18 +42,39 @@ static func random_special_good(week: int) -> int:
 	return GOOD_SPECIALS[rand]
 
 
+static func generate_dummy() -> Meeting:
+	var result = Meeting.new()
+	result.special = Meeting.Special.NONE
+	
+	match randi() % 10:
+		0:
+			result.duration = randi() % MAX_DURATION + EASY_DURATION_MODIFIER
+			result.tint = EASY_TINT_POOL.random_color()
+			result.title = LEISURE_MEETING_TITLE_POOL.random_string_loc()
+		2, 1:
+			result.duration = randi() % MAX_DURATION + MEDIUM_DURATION_MODIFIER
+			result.tint = HARD_TINT_POOL.random_color()
+			result.title = IMPORTANT_MEETING_TITLE_POOL.random_string_loc()
+		_:
+			result.duration = randi() % MAX_DURATION + EASY_DURATION_MODIFIER
+			result.tint = MEDIUM_TINT_POOL.random_color()
+			result.title = MEETING_TITLE_POOL.random_string_loc()
+
+	return result
+
+
 static func generate_easy(week: int) -> Meeting:
 	var result = Meeting.new()
 	result.special = Meeting.Special.NONE
 	result.tint = EASY_TINT_POOL.random_color()
 	match randi() % 3:
 		0:
-			result.duration = randi() % MAX_DURATION + 1
-		1:
 			result.duration = randi() % MAX_DURATION + EASY_DURATION_MODIFIER
+		1:
+			result.duration = 2
 			result.special = random_special_bad(week)
 		2:
-			result.duration = randi() % MAX_DURATION + MEDIUM_DURATION_MODIFIER
+			result.duration =2
 			result.special = random_special_good(week)
 
 	return result
@@ -70,7 +91,7 @@ static func generate_medium(week: int) -> Meeting:
 			result.duration = randi() % MAX_DURATION + MEDIUM_DURATION_MODIFIER
 			result.special = Meeting.Special.NONE
 		2:
-			result.duration = randi() % MAX_DURATION + HARD_DURATION_MODIFIER
+			result.duration = randi() % MAX_DURATION + MEDIUM_DURATION_MODIFIER
 			result.special = random_special_good(week)
 
 	return result
@@ -78,20 +99,24 @@ static func generate_medium(week: int) -> Meeting:
 
 static func generate_hard(week: int) -> Meeting:
 	var result = Meeting.new()
-	match randi() % 2:
+	match randi() % 3:
 		0:
-			result.duration = randi() % MAX_DURATION + MEDIUM_DURATION_MODIFIER
+			result.duration = randi() % MAX_DURATION + HARD_DURATION_MODIFIER
 			result.special = random_special_bad(week)
-			result.tint = MEDIUM_TINT_POOL.random_color()
+			result.tint = HARD_TINT_POOL.random_color()
 		1:
 			result.duration = randi() % MAX_DURATION + HARD_DURATION_MODIFIER
 			result.special = Meeting.Special.NONE
-			result.tint = MEDIUM_TINT_POOL.random_color()
+			result.tint = HARD_TINT_POOL.random_color()
+		2:
+			result.duration = randi() % MAX_DURATION + HARD_DURATION_MODIFIER
+			result.special = random_special_good(week)
+			result.tint = HARD_TINT_POOL.random_color()
 	return result
 
 
 static func generate_week(queue: Array, week_number: int, day_count: int, slots_per_day: int) -> Array:
-	var max_duration = day_count * slots_per_day / 2 + min(week_number / 2, slots_per_day) - day_count * 2
+	var max_duration = day_count * slots_per_day / 2 + min(week_number, slots_per_day * 2) - day_count * 2
 	var duration = 0
 	
 	var specials = {}
