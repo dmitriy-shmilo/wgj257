@@ -28,6 +28,7 @@ onready var _game_over: Node = $"GameOverScreen"
 onready var _shaker: Shaker = $"Shaker"
 onready var _dialog_popup: DialogPopup = $"DialogPopup"
 
+var _cursor_offset = Vector2.ZERO
 var _time = 0
 var _is_time_progressing = true
 var _time_speed_multiplier = 1.0
@@ -65,6 +66,7 @@ var _hints_pending = {
 	"txt_hint_in_progress" : true, #
 	"txt_hint_in_advance" : true, #
 }
+var _dialog_queue = []
 
 func _ready() -> void:
 	_hud.max_mood = MAX_MOOD
@@ -144,7 +146,7 @@ func _process(delta):
 		_gui.pause()
 	
 	if _is_dragging:
-		_cursor.rect_global_position = _snap(get_global_mouse_position())
+		_cursor.rect_global_position = _snap(get_global_mouse_position() + _cursor_offset)
 		_cursor.is_selected = not can_place_request(_current_request)
 
 
@@ -162,8 +164,11 @@ func _toggle_time(val: bool) -> void:
 
 
 func _show_intro() -> void:
-	_show_dialog(_intro_text[0], false)
-	_current_intro_text = 1
+	for intro in _intro_text:
+		_show_dialog(intro, false)
+
+	if Settings.enable_hints:
+		_show_dialog(tr("txt_hint_start"), true)
 
 
 func get_request() -> Node:
@@ -223,17 +228,18 @@ func place_request(request: MeetingRequest, slot: Vector2) -> void:
 				if request_count >= 3:
 					_hints_pending["txt_hint_reschedule"] = false
 					_show_dialog(tr("txt_hint_reschedule"), true)
+					break
 
 
 func can_place_request(request: MeetingRequest) -> bool:
-	var cursor_pos = _cursor.rect_position
+	var cursor_pos = _cursor.rect_position + _cursor_offset
 	var cal_rect = Rect2(_calendar.rect_position, _calendar.rect_size)
 	var success = false
 	
 	if not cal_rect.has_point(cursor_pos):
 		return false
 
-	var slot_pos = _to_slot_position(_cursor.rect_position)
+	var slot_pos = _to_slot_position(_cursor.rect_position + _cursor_offset)
 	var index = _to_slot_index(slot_pos)
 	var lane = index / SLOT_COUNT
 
@@ -379,9 +385,9 @@ func _release_current_request() -> void:
 func _drag_cursor_end(request) -> void:
 	var success = false
 	if can_place_request(request):
-		place_request(request, _to_slot_position(_cursor.rect_position))
+		place_request(request, _to_slot_position(_cursor.rect_position + _cursor_offset))
 		success = true
-	elif _to_slot_index(_to_slot_position(_cursor.rect_position)) < _time * TOTAL_SLOT_COUNT:
+	elif _to_slot_index(_to_slot_position(_cursor.rect_position + _cursor_offset)) < _time * TOTAL_SLOT_COUNT:
 		if _hints_pending["txt_hint_time"] and Settings.enable_hints:
 			_hints_pending["txt_hint_time"] = false
 			_show_dialog(tr("txt_hint_time") % [request.meeting.title], true, Dialog.Emotion.FROWN)
@@ -433,6 +439,17 @@ func _remove_from_pending(request: MeetingRequest) -> void:
 
 
 func _show_dialog(text: String, is_hint: bool = false, emotion: int = 0) -> void:
+	if _dialog_popup.visible:
+		_dialog_queue.append({
+			text = text,
+			is_hint = is_hint,
+			emotion = emotion
+		})
+	else:
+		_do_show_dialog(text, is_hint, emotion)
+
+
+func _do_show_dialog(text: String, is_hint: bool = false, emotion: int = 0) -> void:
 	_toggle_time(false)
 	_dialog_popup.visible = true
 	_dialog_popup.text = text
@@ -536,17 +553,14 @@ func _on_DialogPopup_ok_pressed() -> void:
 	_toggle_time(true)
 	_dialog_popup.visible = false
 	
-	if _current_intro_text == _intro_text.size() and Settings.enable_hints:
-		_show_dialog(tr("txt_hint_start"), true)
-		_current_intro_text += 1
+	if not _dialog_queue.empty():
+		var d = _dialog_queue.pop_front()
+		_do_show_dialog(d.text, d.is_hint, d.emotion)
 
-	if _current_intro_text < _intro_text.size():
-		_show_dialog(_intro_text[_current_intro_text], false)
-		_current_intro_text += 1
 
 
 func _on_AnimationPlayer_ready() -> void:
-	pass#$FastForwardCotainer/AnimationPlayer.play("end_week_float")
+	$FastForwardCotainer/AnimationPlayer.play("end_week_float")
 
 
 func _on_FastForwardButton_button_down() -> void:
