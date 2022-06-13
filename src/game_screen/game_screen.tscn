@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://game_screen/game_screen.gd" type="Script" id=1]
 [ext_resource path="res://game_screen/gui.tscn" type="PackedScene" id=2]
@@ -87,6 +87,38 @@ tracks/1/keys = {
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 1,
 "values": [ Vector2( 122, 14 ), Vector2( 121, 14 ), Vector2( 122, 14 ), Vector2( 123, 14 ) ]
+}
+
+[sub_resource type="Animation" id=8]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("..:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0, 325 ) ]
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "end_week_float"
+length = 2.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("..:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 325 ), Vector2( 8, 325 ) ]
 }
 
 [node name="GameScreen" type="Control"]
@@ -261,6 +293,28 @@ margin_right = 638.0
 margin_bottom = 38.0
 theme = ExtResource( 5 )
 
+[node name="FastForwardCotainer" type="HBoxContainer" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 325.0
+margin_right = 616.0
+margin_bottom = 352.0
+mouse_filter = 2
+alignment = 2
+
+[node name="FastForwardButton" type="Button" parent="FastForwardCotainer"]
+margin_left = 530.0
+margin_right = 616.0
+margin_bottom = 27.0
+custom_fonts/font = ExtResource( 9 )
+text = "Fast Forward"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="FastForwardCotainer"]
+root_node = NodePath("../FastForwardButton")
+anims/RESET = SubResource( 8 )
+anims/end_week_float = SubResource( 7 )
+
 [node name="Cursor" parent="." instance=ExtResource( 4 )]
 visible = false
 margin_top = 32.0
@@ -286,5 +340,8 @@ visible = false
 visible = false
 
 [connection signal="mood_ran_out" from="Top/Hud" to="." method="_on_Hud_mood_ran_out"]
+[connection signal="button_down" from="FastForwardCotainer/FastForwardButton" to="." method="_on_FastForwardButton_button_down"]
+[connection signal="button_up" from="FastForwardCotainer/FastForwardButton" to="." method="_on_FastForwardButton_button_up"]
+[connection signal="ready" from="FastForwardCotainer/AnimationPlayer" to="." method="_on_AnimationPlayer_ready"]
 [connection signal="disable_hints_pressed" from="DialogPopup" to="." method="_on_DialogPopup_disable_hints_pressed"]
 [connection signal="ok_pressed" from="DialogPopup" to="." method="_on_DialogPopup_ok_pressed"]

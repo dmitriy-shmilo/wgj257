@@ -30,6 +30,7 @@ onready var _dialog_popup: DialogPopup = $"DialogPopup"
 
 var _time = 0
 var _is_time_progressing = true
+var _time_speed_multiplier = 1.0
 var _week_number = 1
 var _is_dragging = false
 var _current_request: MeetingRequest = null
@@ -48,7 +49,6 @@ var _intro_text = [
 	tr("txt_intro3")
 ]
 var _current_intro_text = 0
-
 var _hints_pending = {
 	"txt_hint_payday" : true,  #
 	"txt_hint_weekend" : true, #
@@ -82,12 +82,6 @@ func _ready() -> void:
 
 
 func _process(delta):
-	# TODO: for testing, remove later
-	if Input.is_action_pressed("right"):
-		time_speed = 0.2
-	else:
-		time_speed = 1.0 / TOTAL_SLOT_COUNT / 2.0
-
 	if _is_time_progressing:
 		var current_item = get_request()
 				
@@ -97,10 +91,10 @@ func _process(delta):
 		if current_item is MeetingRequest:
 			if current_item.meeting.special == Meeting.Special.LEISURE:
 				_hud.mood_modifier = Hud.MoodModifier.DOUBLE_UP
-				_hud.current_mood += MOOD_RESTORATION_RATE * 2 * delta
+				_hud.current_mood += MOOD_RESTORATION_RATE * 2 * delta * _time_speed_multiplier
 			else:
 				_hud.mood_modifier = Hud.MoodModifier.DOWN
-				_hud.current_mood -= MOOD_DECREASE_RATE * delta
+				_hud.current_mood -= MOOD_DECREASE_RATE * delta * _time_speed_multiplier
 				
 				if _hud.current_mood <= _hud.max_mood / 2 \
 					and Settings.enable_hints \
@@ -109,7 +103,7 @@ func _process(delta):
 						_show_dialog(tr("txt_hint_free_time"), true, Dialog.Emotion.FROWN)
 		elif _hud.current_mood < _hud.max_mood:
 			_hud.mood_modifier = Hud.MoodModifier.UP
-			_hud.current_mood += MOOD_RESTORATION_RATE * delta
+			_hud.current_mood += MOOD_RESTORATION_RATE * delta * _time_speed_multiplier
 		else:
 			_hud.mood_modifier = Hud.MoodModifier.NONE
 
@@ -119,9 +113,9 @@ func _process(delta):
 			_sfx_player.stream = preload("res://assets/sound/fail2.wav")
 			_sfx_player.play()
 
-		_time += delta * time_speed
+		_time += delta * time_speed * _time_speed_multiplier
 		_time_shroud.progress = _time
-		_time_since_tick += delta
+		_time_since_tick += delta * _time_speed_multiplier
 
 		if float(_current_day + 1) / DAY_COUNT <= _time:
 			_current_day += 1
@@ -138,6 +132,8 @@ func _process(delta):
 				create_request(_backlog.pop_back())
 			elif not _current_queue.empty():
 				create_request(_current_queue.pop_back())
+			else:
+				$FastForwardCotainer.visible = true
 		else:
 			if not _current_queue.empty() and randi() % _current_queue.size() >= _pending_requests.size():
 				create_request(_current_queue.pop_back())
@@ -150,6 +146,13 @@ func _process(delta):
 	if _is_dragging:
 		_cursor.rect_global_position = _snap(get_global_mouse_position())
 		_cursor.is_selected = not can_place_request(_current_request)
+
+
+func _set_time_speed_multiplier(val: float) -> void:
+	print(val)
+	_time_speed_multiplier = val
+	for req in _pending_requests:
+		req.speed_multiplier = _time_speed_multiplier
 
 
 func _toggle_time(val: bool) -> void:
@@ -173,8 +176,10 @@ func get_calendar() -> Control:
 
 
 func create_request(meeting) -> void:
+	$FastForwardCotainer.visible = false
 	var scene = MEETING_REQUEST_SCENE.instance()
 	scene.is_expiring = true
+	scene.speed_multiplier = _time_speed_multiplier
 	scene.meeting = meeting
 	scene.column_width = _column_width
 	scene.row_height = _row_height
@@ -218,6 +223,7 @@ func place_request(request: MeetingRequest, slot: Vector2) -> void:
 				if request_count >= 3:
 					_hints_pending["txt_hint_reschedule"] = false
 					_show_dialog(tr("txt_hint_reschedule"), true)
+
 
 func can_place_request(request: MeetingRequest) -> bool:
 	var cursor_pos = _cursor.rect_position
@@ -504,7 +510,7 @@ func _on_pickup_picked_up(sender: Pickup):
 		if _hints_pending["txt_hint_weekend"] and Settings.enable_hints:
 			_show_dialog(tr("txt_hint_weekend"), true, Dialog.Emotion.SMILE)
 			_hints_pending["txt_hint_weekend"] = false
-		_hud.current_mood += 25
+		_hud.current_mood *= 1.3
 
 
 func _on_Hud_mood_ran_out() -> void:
@@ -537,3 +543,15 @@ func _on_DialogPopup_ok_pressed() -> void:
 	if _current_intro_text < _intro_text.size():
 		_show_dialog(_intro_text[_current_intro_text], false)
 		_current_intro_text += 1
+
+
+func _on_AnimationPlayer_ready() -> void:
+	pass#$FastForwardCotainer/AnimationPlayer.play("end_week_float")
+
+
+func _on_FastForwardButton_button_down() -> void:
+	_set_time_speed_multiplier(8.0)
+
+
+func _on_FastForwardButton_button_up() -> void:
+	_set_time_speed_multiplier(1.0)

@@ -6,10 +6,11 @@ signal stabilised(sender)
 
 export(Resource) var meeting setget set_meeting
 export(bool) var is_resizing = false setget set_is_resizing
-export(float) var scroll_speed = 4
+export(float) var scroll_speed = 80
 export(bool) var is_static = false
 export(bool) var is_expiring = false setget set_is_expiring
 export(bool) var is_expiration_visible = true setget set_is_progress_visible
+export(float) var speed_multiplier = 1.0
 
 var current_expiration = 0.0
 var target_position = Vector2.ZERO
@@ -33,7 +34,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if is_expiring and current_expiration <= meeting.expiration_time:
-		current_expiration += delta
+		current_expiration += delta * speed_multiplier
 		_expiration_progress.value = current_expiration
 		
 		var shake_strength = clamp(current_expiration / meeting.expiration_time - 0.33, 0.0, 1.0)
@@ -56,7 +57,7 @@ func _process(delta: float) -> void:
 				return
 			
 			var direction = (target_position - rect_position).normalized()
-			rect_position += direction * scroll_speed
+			rect_position += direction * scroll_speed * delta * speed_multiplier
 		elif not _is_stable:
 			_is_stable = true
 			emit_signal("stabilised", self)
