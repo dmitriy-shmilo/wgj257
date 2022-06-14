@@ -36,3 +36,5 @@ ui_thursday,Thursday,Четверг,Четвер
 ui_friday,Friday,Пятница,П'ятниця
 ui_fast_forward,Fast Forward,Быстрее,Скоріше
 ui_bonus,+$%0.2f\n(%d%% productivity),+$%0.2f\n(%d%% продуктивность),+$%0.2f\n(%d%% продуктивність)
+ui_productivity_tooltip,"Productivity (drops during most\nmeetings, restores in the free time)","Продуктивность (падает во время большинства\nвстреч, растет в свободное время)","Продуктивність (падає під час більшості\nзустрічей, зростає у вільний час)"
+ui_skips_tooltip,Events skipped this week\n(productivity penalty),Пропуски на этой неделе\n(штраф к продуктивности),Пропуски на цьому тижні\n(штраф продуктивності)

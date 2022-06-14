@@ -48,7 +48,7 @@ func _recycle_item(req: MeetingRequest) -> void:
 	var meeting = MeetingGenerator.generate_dummy()
 	
 	if _last_placement.y + meeting.duration * _row_height >= (SLOT_COUNT - 2) * _row_height:
-		_last_placement.y = _row_height * (randi() % 2 + 1)
+		_last_placement.y = _row_height * (randi() % 4 + 1)
 		_last_placement.x += _column_width
 	
 	req.is_resizing = true
@@ -56,11 +56,11 @@ func _recycle_item(req: MeetingRequest) -> void:
 	req.is_expiring = false
 	req.meeting = meeting
 	req.rect_position = _last_placement
-	_last_placement.y += (meeting.duration + randi() % 4) * _row_height
+	_last_placement.y += (meeting.duration + randi() % 10) * _row_height
 
 
 func _generate_initial_items() -> void:
-	for i in range(40):
+	for i in range(20):
 		var req = MEETING_REQUEST_SCENE.instance()
 		req.column_width = _column_width
 		req.row_height = _row_height

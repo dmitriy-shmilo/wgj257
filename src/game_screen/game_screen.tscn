@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://game_screen/game_screen.gd" type="Script" id=1]
 [ext_resource path="res://game_screen/gui.tscn" type="PackedScene" id=2]
@@ -17,6 +17,7 @@
 [ext_resource path="res://game_over_screen/game_over_screen.tscn" type="PackedScene" id=15]
 [ext_resource path="res://game_screen/dialog_popup.tscn" type="PackedScene" id=16]
 [ext_resource path="res://game_screen/bonus_label.gd" type="Script" id=17]
+[ext_resource path="res://assets/texture/icon_skips.tres" type="Texture" id=18]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 3 )
@@ -161,7 +162,18 @@ margin_left = 10.0
 margin_top = -8.0
 margin_right = 25.0
 margin_bottom = 7.0
+hint_tooltip = "ui_productivity_tooltip"
 texture = SubResource( 2 )
+
+[node name="SkipsIcon" type="TextureRect" parent="Top/Hud"]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = 154.0
+margin_top = -8.0
+margin_right = 170.0
+margin_bottom = 8.0
+hint_tooltip = "ui_skips_tooltip"
+texture = ExtResource( 18 )
 
 [node name="MoodModifierIcon" type="TextureRect" parent="Top/Hud"]
 anchor_top = 0.5
@@ -188,6 +200,7 @@ margin_left = 30.0
 margin_top = -4.0
 margin_right = 115.0
 margin_bottom = 5.0
+hint_tooltip = "ui_productivity_tooltip"
 value = 10.0
 texture_under = SubResource( 4 )
 texture_progress = SubResource( 3 )
@@ -221,6 +234,19 @@ theme = ExtResource( 5 )
 custom_fonts/font = ExtResource( 9 )
 text = "0"
 align = 2
+
+[node name="SkipsLabel" type="Label" parent="Top/Hud"]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = 174.0
+margin_top = -6.0
+margin_right = 213.0
+margin_bottom = 7.0
+hint_tooltip = "ui_skips_tooltip"
+mouse_filter = 1
+theme = ExtResource( 5 )
+custom_fonts/font = ExtResource( 9 )
+text = "x0"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Top/Hud"]
 reset_on_save = false

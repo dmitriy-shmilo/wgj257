@@ -19,6 +19,7 @@ var current_mood = 100.0 setget set_current_mood
 var mood_modifier = MoodModifier.NONE setget set_mood_modifier
 var current_score = 0.0 setget set_current_score
 var current_week = 1 setget set_current_week
+var skips = 0 setget set_skips
 
 onready var _mood_modifier_icons = [
 	$"MoodModifierIcon",
@@ -30,6 +31,7 @@ onready var _week_label: Label = $"WeekLabel"
 onready var _animation_player: AnimationPlayer = $"AnimationPlayer"
 onready var _shaker: Shaker = $"Shaker"
 onready var _sfx_player: AudioStreamPlayer = $"SfxPlayer"
+onready var _skips_label: Label = $"SkipsLabel"
 
 func _ready() -> void:
 	_animation_player.play("default")
@@ -38,6 +40,13 @@ func _ready() -> void:
 	set_current_week(current_week)
 	set_mood_modifier(mood_modifier)
 	set_current_score(current_score)
+	set_skips(skips)
+
+
+func set_skips(val: int) -> void:
+	skips = val
+	if is_inside_tree():
+		_skips_label.text = "x%d" % [val]
 
 
 func set_max_mood(value: float) -> void:

@@ -332,6 +332,7 @@ func _end_week() -> void:
 
 func _start_week() -> void:
 	_skip_count = 0
+	_hud.skips = _skip_count
 	if not _current_queue.empty():
 		_backlog.append_array(_current_queue)
 		_current_queue.clear()
@@ -489,12 +490,13 @@ func _on_meeting_request_expired(request: MeetingRequest) -> void:
 		Meeting.Special.NOT_IMPORTANT, Meeting.Special.LEISURE:
 			_skip_count += 1
 		_:
-			_hud.current_mood -= EXPIRATION_PENALTY * _skip_count
+			_hud.current_mood -= EXPIRATION_PENALTY * _skip_count / 2.0
 			if _skip_count > 0:
 				_hud.shake_mood_meter()
 				if Settings.enable_screenshake:
 					_shaker.shake_horizontal(self, "rect_position", 4, 4)
 			_skip_count += 1
+	_hud.skips = _skip_count
 
 	if request.meeting.special == Meeting.Special.IMPORTANT and _hints_pending["txt_hint_important_expiration"] and Settings.enable_hints:
 		_show_dialog(tr("txt_hint_important_expiration") % [request.meeting.title], true, Dialog.Emotion.YELL)
@@ -535,7 +537,6 @@ func _on_meeting_request_stabilised(request: MeetingRequest) -> void:
 
 func _on_pickup_picked_up(sender: Pickup):
 	if sender.is_payday:
-		_skip_count -= 1
 		if _hints_pending["txt_hint_payday"] and Settings.enable_hints:
 			_show_dialog(tr("txt_hint_payday"), true, Dialog.Emotion.SMILE)
 			_hints_pending["txt_hint_payday"] = false

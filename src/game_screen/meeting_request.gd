@@ -36,14 +36,15 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if is_expiring and current_expiration <= meeting.expiration_time:
-		current_expiration += delta * speed_multiplier
-		_expiration_progress.value = current_expiration
-		
-		var shake_strength = clamp(current_expiration / meeting.expiration_time - 0.33, 0.0, 1.0)
-		shake_strength = ceil(shake_strength * 4.0)
-		
-		_expiration_progress.material.set_shader_param("shake_strength", shake_strength)
-		_background.material.set_shader_param("shake_strength", shake_strength)
+		if rect_global_position.x <= 600: # TODO: magic number
+			current_expiration += delta * speed_multiplier
+			_expiration_progress.value = current_expiration
+			
+			var shake_strength = clamp(current_expiration / meeting.expiration_time - 0.33, 0.0, 1.0)
+			shake_strength = ceil(shake_strength * 4.0)
+			
+			_expiration_progress.material.set_shader_param("shake_strength", shake_strength)
+			_background.material.set_shader_param("shake_strength", shake_strength)
 	elif is_expiring:
 		set_is_expiring(false)
 		_sfx_player.stream = preload("res://assets/sound/expire1.wav")

@@ -67,6 +67,7 @@ static func generate_easy(week: int) -> Meeting:
 	var result = Meeting.new()
 	result.special = Meeting.Special.NONE
 	result.tint = EASY_TINT_POOL.random_color()
+	result.expiration_time = 15.0
 	match randi() % 3:
 		0:
 			result.duration = randi() % MAX_DURATION + EASY_DURATION_MODIFIER
@@ -83,6 +84,7 @@ static func generate_easy(week: int) -> Meeting:
 static func generate_medium(week: int) -> Meeting:
 	var result = Meeting.new()
 	result.tint = MEDIUM_TINT_POOL.random_color()
+	result.expiration_time = 11.0
 	match randi() % 3:
 		0:
 			result.duration = randi() % MAX_DURATION + MEDIUM_DURATION_MODIFIER
@@ -99,24 +101,23 @@ static func generate_medium(week: int) -> Meeting:
 
 static func generate_hard(week: int) -> Meeting:
 	var result = Meeting.new()
+	result.expiration_time = 9.0
+	result.tint = HARD_TINT_POOL.random_color()
 	match randi() % 3:
 		0:
 			result.duration = randi() % MAX_DURATION + HARD_DURATION_MODIFIER
 			result.special = random_special_bad(week)
-			result.tint = HARD_TINT_POOL.random_color()
 		1:
 			result.duration = randi() % MAX_DURATION + HARD_DURATION_MODIFIER
 			result.special = Meeting.Special.NONE
-			result.tint = HARD_TINT_POOL.random_color()
 		2:
 			result.duration = randi() % MAX_DURATION + HARD_DURATION_MODIFIER
 			result.special = random_special_good(week)
-			result.tint = HARD_TINT_POOL.random_color()
 	return result
 
 
 static func generate_week(queue: Array, week_number: int, day_count: int, slots_per_day: int) -> Array:
-	var max_duration = day_count * slots_per_day / 2 + min(week_number * 1.5, slots_per_day * 3) - day_count * 2
+	var max_duration = day_count * slots_per_day / 2 + min(week_number * 3, (slots_per_day - 2) * 3) - day_count * 2
 	var duration = 0
 	
 	var specials = {}
@@ -136,7 +137,7 @@ static func generate_week(queue: Array, week_number: int, day_count: int, slots_
 			var count = specials.get(item.special, 0) + 1
 			specials[item.special] = count
 			if count > min(week_number / 2 + 1, 3):
-				continue
+				item.special = Meeting.Special.NONE
 
 		match item.special:
 			Meeting.Special.IMPORTANT:
