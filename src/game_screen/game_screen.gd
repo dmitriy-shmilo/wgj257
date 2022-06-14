@@ -7,7 +7,7 @@ const MAX_MOOD = 100.0
 const DAY_COUNT: int = 5
 const SLOT_COUNT: int = 18
 const TOTAL_SLOT_COUNT = DAY_COUNT * SLOT_COUNT
-const MOOD_RESTORATION_RATE = 1.5 # per second
+const MOOD_RESTORATION_RATE = 1.2 # per second
 const MOOD_DECREASE_RATE = 2 # per second
 const EXPIRATION_PENALTY = 15.0 # mood points
 
@@ -28,6 +28,7 @@ onready var _game_over: Node = $"GameOverScreen"
 onready var _shaker: Shaker = $"Shaker"
 onready var _dialog_popup: DialogPopup = $"DialogPopup"
 
+var _skip_count = 0
 var _cursor_offset = Vector2.ZERO
 var _time = 0
 var _is_time_progressing = true
@@ -151,7 +152,6 @@ func _process(delta):
 
 
 func _set_time_speed_multiplier(val: float) -> void:
-	print(val)
 	_time_speed_multiplier = val
 	for req in _pending_requests:
 		req.speed_multiplier = _time_speed_multiplier
@@ -322,6 +322,7 @@ func _end_week() -> void:
 
 
 func _start_week() -> void:
+	_skip_count = 0
 	if not _current_queue.empty():
 		_backlog.append_array(_current_queue)
 		_current_queue.clear()
@@ -468,17 +469,23 @@ func _on_meeting_request_expired(request: MeetingRequest) -> void:
 	if _cursor.meeting == request.meeting:
 		_release_current_request()
 	_remove_from_pending(request)
-	
-	
+
 	match request.meeting.special:
 		Meeting.Special.IMPORTANT:
-			_hud.current_mood -= EXPIRATION_PENALTY * 3
+			_hud.current_mood -= EXPIRATION_PENALTY * max(3, _skip_count)
+			_skip_count += 1
 			_hud.shake_mood_meter()
+			if Settings.enable_screenshake:
+				_shaker.shake_horizontal(self, "rect_position", 8, 8)
 		Meeting.Special.NOT_IMPORTANT, Meeting.Special.LEISURE:
-			pass
+			_skip_count += 1
 		_:
-			_hud.current_mood -= EXPIRATION_PENALTY
-			_hud.shake_mood_meter()
+			_hud.current_mood -= EXPIRATION_PENALTY * _skip_count
+			if _skip_count > 0:
+				_hud.shake_mood_meter()
+				if Settings.enable_screenshake:
+					_shaker.shake_horizontal(self, "rect_position", 4, 4)
+			_skip_count += 1
 
 	if request.meeting.special == Meeting.Special.IMPORTANT and _hints_pending["txt_hint_important_expiration"] and Settings.enable_hints:
 		_show_dialog(tr("txt_hint_important_expiration") % [request.meeting.title], true, Dialog.Emotion.YELL)
@@ -536,7 +543,8 @@ func _on_Hud_mood_ran_out() -> void:
 	_sfx_player.stream = preload("res://assets/sound/lose1.wav")
 	_sfx_player.play()
 	
-	_shaker.shake_horizontal(self, "rect_position", 8)
+	if Settings.enable_screenshake:
+		_shaker.shake_horizontal(self, "rect_position", 8, 8)
 	
 	_hud.shake_mood_meter()
 	_game_over.show()

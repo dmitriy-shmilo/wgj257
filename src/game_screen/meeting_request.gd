@@ -25,6 +25,7 @@ onready var _duration_label: Label = $"MarginContainer/VBoxContainer/HBoxContain
 onready var _icon: TextureRect = $"MarginContainer/VBoxContainer/HBoxContainer/Icon"
 onready var _expiration_progress: TextureProgress = $"ExpirationProgress"
 onready var _sfx_player: AudioStreamPlayer = $"SfxPlayer"
+onready var _tween: Tween = $"Tween"
 
 var _is_stable = false
 
@@ -47,8 +48,16 @@ func _process(delta: float) -> void:
 		set_is_expiring(false)
 		_sfx_player.stream = preload("res://assets/sound/expire1.wav")
 		_sfx_player.play()
+		_tween.interpolate_property(self, \
+			"rect_position", \
+			rect_position, \
+			rect_position + Vector2(0, 100), \
+			0.5, \
+			Tween.TRANS_BACK, \
+			Tween.EASE_IN)
+		_tween.start()
 		emit_signal("expired", self)
-		yield(_sfx_player, "finished")
+		yield(_tween, "tween_all_completed")
 		queue_free()
 
 	if is_expiring:

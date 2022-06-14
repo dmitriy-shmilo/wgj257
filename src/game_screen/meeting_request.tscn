@@ -44,7 +44,7 @@ shader_param/shake_strength = 0.0
 [sub_resource type="ShaderMaterial" id=7]
 resource_local_to_scene = true
 shader = SubResource( 2 )
-shader_param/tint = Color( 0.862745, 0.239216, 0.239216, 1 )
+shader_param/tint = Color( 0.976471, 0.509804, 0.517647, 1 )
 shader_param/shake_strength = 0.0
 
 [sub_resource type="AtlasTexture" id=4]
@@ -89,7 +89,6 @@ margin_bottom = 32.0
 value = 10.0
 texture_progress = SubResource( 4 )
 fill_mode = 3
-tint_progress = Color( 0.729412, 0.133333, 0.133333, 1 )
 nine_patch_stretch = true
 stretch_margin_left = 4
 stretch_margin_top = 4
@@ -143,5 +142,7 @@ stretch_mode = 4
 
 [node name="SfxPlayer" type="AudioStreamPlayer" parent="."]
 bus = "Sfx"
+
+[node name="Tween" type="Tween" parent="."]
 
 [connection signal="gui_input" from="." to="." method="_on_MeetingRequest_gui_input"]
