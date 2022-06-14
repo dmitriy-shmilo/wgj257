@@ -526,10 +526,14 @@ func _on_meeting_request_stabilised(request: MeetingRequest) -> void:
 
 func _on_pickup_picked_up(sender: Pickup):
 	if sender.is_payday:
+		_skip_count -= 1
 		if _hints_pending["txt_hint_payday"] and Settings.enable_hints:
 			_show_dialog(tr("txt_hint_payday"), true, Dialog.Emotion.SMILE)
 			_hints_pending["txt_hint_payday"] = false
-		_hud.current_score += 5.00
+
+		var point_count = 10.0
+		_hud.current_score += point_count * _hud.current_mood / _hud.max_mood
+
 	if sender.is_mood_up:
 		if _hints_pending["txt_hint_weekend"] and Settings.enable_hints:
 			_show_dialog(tr("txt_hint_weekend"), true, Dialog.Emotion.SMILE)

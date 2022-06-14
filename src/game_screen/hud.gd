@@ -76,7 +76,7 @@ func set_mood_modifier(value: int) -> void:
 				_mood_modifier_icons[1].texture = MOOD_DOWN
 
 
-func set_current_score(value: int) -> void:
+func set_current_score(value: float) -> void:
 	if value > current_score:
 		_sfx_player.stream = preload("res://assets/sound/score_gain1.wav")
 		_sfx_player.play()
