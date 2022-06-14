@@ -136,6 +136,7 @@ _global_script_class_icons={
 
 config/name="wgj257"
 run/main_scene="res://splash_screen/splash_screen.tscn"
+boot_splash/image="res://assets/art/splash.png"
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
 
@@ -223,4 +224,5 @@ translations=PoolStringArray( "res://text/tr.en.translation", "res://text/tr.ru.
 
 [rendering]
 
+quality/driver/driver_name="GLES2"
 environment/default_environment="res://default_env.tres"

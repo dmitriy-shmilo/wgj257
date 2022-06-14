@@ -243,6 +243,46 @@ slot_alt_delimeter_color = Color( 0.780392, 0.811765, 0.8, 1 )
 background_color = Color( 0.921569, 0.929412, 0.913725, 1 )
 reserve_background_color = Color( 0.6, 0.6, 0.6, 1 )
 
+[node name="Monday" type="Label" parent="Calendar"]
+margin_left = 8.0
+margin_top = 1.0
+margin_right = 62.0
+margin_bottom = 14.0
+custom_fonts/font = ExtResource( 9 )
+text = "ui_monday"
+
+[node name="Tuesday" type="Label" parent="Calendar"]
+margin_left = 136.0
+margin_top = 1.0
+margin_right = 190.0
+margin_bottom = 14.0
+custom_fonts/font = ExtResource( 9 )
+text = "ui_tuesday"
+
+[node name="Wednesday" type="Label" parent="Calendar"]
+margin_left = 264.0
+margin_top = 1.0
+margin_right = 324.0
+margin_bottom = 14.0
+custom_fonts/font = ExtResource( 9 )
+text = "ui_wednesday"
+
+[node name="Thursday" type="Label" parent="Calendar"]
+margin_left = 392.0
+margin_top = 1.0
+margin_right = 452.0
+margin_bottom = 14.0
+custom_fonts/font = ExtResource( 9 )
+text = "ui_thursday"
+
+[node name="Friday" type="Label" parent="Calendar"]
+margin_left = 520.0
+margin_top = 1.0
+margin_right = 580.0
+margin_bottom = 14.0
+custom_fonts/font = ExtResource( 9 )
+text = "ui_friday"
+
 [node name="Calendar2" type="Control" parent="."]
 margin_left = 641.0
 margin_top = 32.0
@@ -255,6 +295,46 @@ slot_delimeter_color = Color( 0.309804, 0.560784, 0.729412, 1 )
 slot_alt_delimeter_color = Color( 0.780392, 0.811765, 0.8, 1 )
 background_color = Color( 0.921569, 0.929412, 0.913725, 1 )
 reserve_background_color = Color( 0.6, 0.6, 0.6, 1 )
+
+[node name="Monday" type="Label" parent="Calendar2"]
+margin_left = 8.0
+margin_top = 1.0
+margin_right = 62.0
+margin_bottom = 14.0
+custom_fonts/font = ExtResource( 9 )
+text = "ui_monday"
+
+[node name="Tuesday" type="Label" parent="Calendar2"]
+margin_left = 136.0
+margin_top = 1.0
+margin_right = 190.0
+margin_bottom = 14.0
+custom_fonts/font = ExtResource( 9 )
+text = "ui_tuesday"
+
+[node name="Wednesday" type="Label" parent="Calendar2"]
+margin_left = 264.0
+margin_top = 1.0
+margin_right = 324.0
+margin_bottom = 14.0
+custom_fonts/font = ExtResource( 9 )
+text = "ui_wednesday"
+
+[node name="Thursday" type="Label" parent="Calendar2"]
+margin_left = 392.0
+margin_top = 1.0
+margin_right = 452.0
+margin_bottom = 14.0
+custom_fonts/font = ExtResource( 9 )
+text = "ui_thursday"
+
+[node name="Friday" type="Label" parent="Calendar2"]
+margin_left = 520.0
+margin_top = 1.0
+margin_right = 580.0
+margin_bottom = 14.0
+custom_fonts/font = ExtResource( 9 )
+text = "ui_friday"
 
 [node name="TimeShroud" type="Control" parent="."]
 margin_top = 32.0
