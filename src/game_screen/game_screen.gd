@@ -1,5 +1,9 @@
 extends Control
 
+const PLAYLIST = [
+	preload("res://assets/sound/soundtrack1.ogg"),
+	preload("res://assets/sound/soundtrack2.ogg")
+]
 const MEETING_REQUEST_SCENE = preload("res://game_screen/meeting_request.tscn")
 const PICKUP_SCENE = preload("res://game_screen/pickup.tscn")
 
@@ -27,6 +31,7 @@ onready var _fader: Fader = $"Fader"
 onready var _game_over: Node = $"GameOverScreen"
 onready var _shaker: Shaker = $"Shaker"
 onready var _dialog_popup: DialogPopup = $"DialogPopup"
+onready var _soundtrack_player: AudioStreamPlayer = $"SoundtrackPlayer"
 
 var _skip_count = 0
 var _cursor_offset = Vector2.ZERO
@@ -68,6 +73,7 @@ var _hints_pending = {
 	"txt_hint_in_advance" : true, #
 }
 var _dialog_queue = []
+var _soundtrack_idx = 0
 
 func _ready() -> void:
 	_hud.max_mood = MAX_MOOD
@@ -82,6 +88,8 @@ func _ready() -> void:
 	MeetingGenerator.generate_week(_current_queue, _week_number, DAY_COUNT, SLOT_COUNT)
 	create_request(_current_queue.pop_back())
 	_show_intro()
+	_soundtrack_player.stream = PLAYLIST[_soundtrack_idx]
+	_soundtrack_player.play()
 
 
 func _process(delta):
@@ -543,7 +551,7 @@ func _on_pickup_picked_up(sender: Pickup):
 
 func _on_Hud_mood_ran_out() -> void:
 	_toggle_time(false)
-
+	_soundtrack_player.stop()
 	_sfx_player.stream = preload("res://assets/sound/lose1.wav")
 	_sfx_player.play()
 	
@@ -570,7 +578,6 @@ func _on_DialogPopup_ok_pressed() -> void:
 		_do_show_dialog(d.text, d.is_hint, d.emotion)
 
 
-
 func _on_AnimationPlayer_ready() -> void:
 	$FastForwardCotainer/AnimationPlayer.play("end_week_float")
 
@@ -581,3 +588,9 @@ func _on_FastForwardButton_button_down() -> void:
 
 func _on_FastForwardButton_button_up() -> void:
 	_set_time_speed_multiplier(1.0)
+
+
+func _on_SoundtrackPlayer_finished() -> void:
+	_soundtrack_idx = (_soundtrack_idx + 1) % PLAYLIST.size()
+	_soundtrack_player.stream = PLAYLIST[_soundtrack_idx]
+	_soundtrack_player.play()

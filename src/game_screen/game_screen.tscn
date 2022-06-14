@@ -342,7 +342,6 @@ margin_right = 640.0
 margin_bottom = 318.0
 mouse_filter = 2
 script = ExtResource( 8 )
-progress = 0.5
 color = Color( 0, 0, 0, 0.501961 )
 
 [node name="Bottom" type="NinePatchRect" parent="."]
@@ -377,21 +376,22 @@ theme = ExtResource( 5 )
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = 325.0
-margin_right = 616.0
-margin_bottom = 352.0
+margin_top = -35.0
+margin_right = -14.0
+margin_bottom = -8.0
 mouse_filter = 2
 alignment = 2
 
 [node name="FastForwardButton" type="Button" parent="FastForwardCotainer"]
-margin_left = 530.0
-margin_right = 616.0
+margin_left = 522.0
+margin_right = 626.0
 margin_bottom = 27.0
 custom_fonts/font = ExtResource( 9 )
-text = "Fast Forward"
+text = "ui_fast_forward"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="FastForwardCotainer"]
 root_node = NodePath("../FastForwardButton")
+reset_on_save = false
 anims/RESET = SubResource( 8 )
 anims/end_week_float = SubResource( 7 )
 
@@ -409,6 +409,7 @@ bus = "Sfx"
 [node name="WeekEndTween" type="Tween" parent="."]
 
 [node name="Fader" parent="." instance=ExtResource( 14 )]
+audio_player = NodePath("../SoundtrackPlayer")
 
 [node name="GameOverScreen" parent="." instance=ExtResource( 15 )]
 pause_mode = 2
@@ -419,9 +420,14 @@ visible = false
 [node name="DialogPopup" parent="." instance=ExtResource( 16 )]
 visible = false
 
+[node name="SoundtrackPlayer" type="AudioStreamPlayer" parent="."]
+pause_mode = 2
+bus = "Music"
+
 [connection signal="mood_ran_out" from="Top/Hud" to="." method="_on_Hud_mood_ran_out"]
 [connection signal="button_down" from="FastForwardCotainer/FastForwardButton" to="." method="_on_FastForwardButton_button_down"]
 [connection signal="button_up" from="FastForwardCotainer/FastForwardButton" to="." method="_on_FastForwardButton_button_up"]
 [connection signal="ready" from="FastForwardCotainer/AnimationPlayer" to="." method="_on_AnimationPlayer_ready"]
 [connection signal="disable_hints_pressed" from="DialogPopup" to="." method="_on_DialogPopup_disable_hints_pressed"]
 [connection signal="ok_pressed" from="DialogPopup" to="." method="_on_DialogPopup_ok_pressed"]
+[connection signal="finished" from="SoundtrackPlayer" to="." method="_on_SoundtrackPlayer_finished"]
