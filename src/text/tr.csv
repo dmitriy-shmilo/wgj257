@@ -5,7 +5,7 @@ txt_credits,"[font=res://ui/font_large.tres]Font[/font]
 
 [font=res://ui/font_large.tres]Music[/font]
 - [url=https://opengameart.org/content/two-left-socks]Two Left Socks[/url] by congusbongus.
-- [url=https://opengameart.org/content/shopping-theme]Shopping Theme[/url] by [url=https://soundcloud.com/prtrblnd]"Paranoid"[/url].
+- [url=https://opengameart.org/content/shopping-theme]Shopping Theme[/url] by [url=https://soundcloud.com/prtrblnd]'Paranoid'[/url].
 - [url=https://opengameart.org/content/somewhere-in-the-elevator]Somewhere in the Elevator[/url] by Peachtea@You're Perfect Studio.
 
 [font=res://ui/font_large.tres]Art[/font]
@@ -18,7 +18,7 @@ txt_credits,"[font=res://ui/font_large.tres]Font[/font]
 
 [font=res://ui/font_large.tres]Музыка[/font]
 - [url=https://opengameart.org/content/two-left-socks]Two Left Socks[/url] автор congusbongus.
-- [url=https://opengameart.org/content/shopping-theme]Shopping Theme[/url] автор [url=https://soundcloud.com/prtrblnd]"Paranoid"[/url].
+- [url=https://opengameart.org/content/shopping-theme]Shopping Theme[/url] автор [url=https://soundcloud.com/prtrblnd]'Paranoid'[/url].
 - [url=https://opengameart.org/content/somewhere-in-the-elevator]Somewhere in the Elevator[/url] автор Peachtea@You're Perfect Studio.
 
 [font=res://ui/font_large.tres]Арт[/font]
@@ -31,7 +31,7 @@ txt_credits,"[font=res://ui/font_large.tres]Font[/font]
 
 [font=res://ui/font_large.tres]Музика[/font]
 - [url=https://opengameart.org/content/two-left-socks]Two Left Socks[/url] автор congusbongus.
-- [url=https://opengameart.org/content/shopping-theme]Shopping Theme[/url] автор [url=https://soundcloud.com/prtrblnd]"Paranoid"[/url].
+- [url=https://opengameart.org/content/shopping-theme]Shopping Theme[/url] автор [url=https://soundcloud.com/prtrblnd]'Paranoid'[/url].
 - [url=https://opengameart.org/content/somewhere-in-the-elevator]Somewhere in the Elevator[/url] автор Peachtea@You're Perfect Studio.
 
 [font=res://ui/font_large.tres]Арт[/font]
@@ -47,7 +47,7 @@ txt_intro3,"It's not all meets and greets for me, though. I still do some actual
 txt_hint_payday,"I'm not the frugal type. Keep me productive, and I'll make sure you get some daily bonus ([img]res://assets/texture/icon_score.tres[/img]).","Я не скупердяй. Побеспокойтесь о моей продуктивности, а я побеспокоюсь о том чтобы вы получали ежедневный бонус ([img]res://assets/texture/icon_score.tres[/img]).","Я не скупий. Подбайте про мою продуктивність, а я подбаю про те, щоб ви отримували щоденний бонус ([img]res://assets/texture/icon_score.tres[/img])."
 txt_hint_weekend,I love Fridays! You know why? Because they end! A day-long golf session will surely help me relax after a week of hard work.,Обожаю пятницы! Знаете почему? Потому что они заканчиваются. Субботний денек игры в гольф однозначно поможет мне расслабиться после тяжелой рабочей недели.,"Обожнюю п'ятниці! Знаєте, чому? Тому що вони закінчуються. Суботній день гри в гольф допоможе мені розслабитися після важкого робочого тижня."
 txt_hint_time,"""We need this done yesterday"" are the words that I tell other people, not the other way around! How do you expect me to attend '%s' in the past?","В этой компании я говорю ""это должно быть сделано вчера"", а не мне! Каким образом я должен посетить '%s' в прошлом?","У цій компанії я говорю ""це має бути зроблено вчора"", а не мені! Яким чином я маю відвідати '%s' у минулому?"
-txt_hint_expiration,"It came to my attention that '%s' was supposed to happen some time this week, but you didn't allocate any of my time for it. I'll let it slide this time, but do make sure that I don't miss a lot of meetings. It's bad management.","Мне сообщили что  '%s' должен был быть запланирован на этой неделе, но вы не выделили моего времени на эту встречу. На первый раз прощаю, но побеспокойтесь чтоб я не пропускал слишком много встреч в будущем.","Мені повідомили що '%s' повинен був бути запланований цього тижня, але ви не виділили мого часу на цю зустріч. Вперше прощаю, але подбайте щоб я не пропускав занадто багато зустрічей у майбутньому."
+txt_hint_expiration,"It came to my attention that '%s' was supposed to happen some time this week, but you didn't allocate any of my time for it. I'll let it slide this time, but do make sure that I don't miss a lot of meetings. Every time I miss one, I get a call from the organizers, which distracts me from my work.","Мне сообщили что  '%s' должен был быть запланирован на этой неделе, но вы не выделили моего времени на эту встречу. На первый раз прощаю, но побеспокойтесь чтоб я не пропускал слишком много встреч в будущем. А то мне звонят организаторы пропущенных встреч и отвлекают от работы.","Мені повідомили що '%s' повинен був бути запланований цього тижня, але ви не виділили мого часу на цю зустріч. Вперше прощаю, але подбайте щоб я не пропускав занадто багато зустрічей у майбутньому. Бо мені дзвонять організатори пропущених зустрічей та відволікають від роботи."
 txt_hint_no_reschedule,"The guys running '%s' are quite busy ([img]res://assets/texture/icon_lock.tres[/img]). Once we decide the time, they won't agree to a reschedule.","Парни, которые проводят '%s' довольно занятые люди ([img]res://assets/texture/icon_lock.tres[/img]). Как только мы определимся со временем, они больше не согласятся переносить встречу.","Хлопці, які проводять '%s' досить зайняті люди ([img] res://assets/texture/icon_lock.tres [/img]). Як тільки ми визначимося з часом, вони більше не погодяться переносити зустріч."
 txt_hint_important,"It's extremely important ([img]res://assets/texture/icon_important.tres[/img]) that I attend this upcoming '%s'. Make sure it's on my radar, or I'm going to be REALLY upset.","Очень важно ([img]res://assets/texture/icon_important.tres[/img]) чтоб я попал на этот '%s'. Побеспокойтесь чтоб эта встреча не потерялась, иначе я буду ОЧЕНЬ расстроен.","Дуже важливо ([img]res://assets/texture/icon_important.tres[/img]) щоб я потрапив на цей '%s'. Потурбуйтесь щоб ця зустріч не загубилася, інакше я буду ДУЖЕ засмучений."
 txt_hint_unimportant,"Ugh, '%s' is just clutter on my calendar ([img]res://assets/texture/icon_unimportant.tres[/img]). I bet nobody will even notice if I don't come.","Фу, '%s' - это просто мусор ([img]res://assets/texture/icon_unimportant.tres[/img])для моего календаря. Бьюсь об заклад что никто и не заметит если я пропущу этот раз.","Фу, '%s' - це просто сміття ([img]res://assets/texture/icon_unimportant.tres[/img]) для мого календаря. Б'юся об заклад що ніхто і не помітить якщо я пропущу цей раз."
@@ -88,3 +88,4 @@ meeting_no_reschedule_3,Security training,Тренинг по безопасно
 meeting_advance_1,Big customer onboarding,Адаптация большого заказчика,Адаптація великого замовника
 meeting_advance_2,On-site presentation,Презентация на месте,Презентація на місці
 meeting_advance_3,Feature presentation,Презентация функционала,Презентація функціоналу
+txt_game_over,"I endured your incompetence for %d weeks, but enough is enough! I specifically asked you to keep me productive! How hard is it to just do your job? Take your $%0.2f and leave!","Я терпел вашу некомпетентность %d недель, но всему есть предел! Я же сказал, ваша работа - следить за моей продуктивностью, неужели это так тяжело?! Забирайте свои $%0.2f и уходите!","Я терпів вашу некомпетентність %d тижнів, але це вже занадто! Я ж сказав, ваша робота – стежити за моєю продуктивністю, невже це так тяжко?! Забирайте свої $%0.2f та йдіть геть!"

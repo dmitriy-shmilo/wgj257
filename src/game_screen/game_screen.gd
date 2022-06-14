@@ -32,6 +32,7 @@ onready var _game_over: Node = $"GameOverScreen"
 onready var _shaker: Shaker = $"Shaker"
 onready var _dialog_popup: DialogPopup = $"DialogPopup"
 onready var _soundtrack_player: AudioStreamPlayer = $"SoundtrackPlayer"
+onready var _bonus_label: Label = $"BonusLabel"
 
 var _skip_count = 0
 var _cursor_offset = Vector2.ZERO
@@ -539,8 +540,10 @@ func _on_pickup_picked_up(sender: Pickup):
 			_show_dialog(tr("txt_hint_payday"), true, Dialog.Emotion.SMILE)
 			_hints_pending["txt_hint_payday"] = false
 
-		var point_count = 10.0
-		_hud.current_score += point_count * _hud.current_mood / _hud.max_mood
+		var point_count = 10.0 * _hud.current_mood / _hud.max_mood
+		var bonus = int(_hud.current_mood / _hud.max_mood * 100)
+		_bonus_label.show_at(tr("ui_bonus") % [point_count, bonus], sender.rect_global_position)
+		_hud.current_score += point_count
 
 	if sender.is_mood_up:
 		if _hints_pending["txt_hint_weekend"] and Settings.enable_hints:
@@ -559,7 +562,7 @@ func _on_Hud_mood_ran_out() -> void:
 		_shaker.shake_horizontal(self, "rect_position", 8, 8)
 	
 	_hud.shake_mood_meter()
-	_game_over.show()
+	_game_over.show_game_over(_week_number, _hud.current_score)
 
 
 func _on_DialogPopup_disable_hints_pressed() -> void:

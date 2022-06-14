@@ -35,3 +35,4 @@ ui_wednesday,Wednesday,Среда,Середа
 ui_thursday,Thursday,Четверг,Четвер
 ui_friday,Friday,Пятница,П'ятниця
 ui_fast_forward,Fast Forward,Быстрее,Скоріше
+ui_bonus,+$%0.2f\n(%d%% productivity),+$%0.2f\n(%d%% продуктивность),+$%0.2f\n(%d%% продуктивність)

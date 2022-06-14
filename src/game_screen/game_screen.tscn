@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://game_screen/game_screen.gd" type="Script" id=1]
 [ext_resource path="res://game_screen/gui.tscn" type="PackedScene" id=2]
@@ -16,6 +16,7 @@
 [ext_resource path="res://ui/fader.tscn" type="PackedScene" id=14]
 [ext_resource path="res://game_over_screen/game_over_screen.tscn" type="PackedScene" id=15]
 [ext_resource path="res://game_screen/dialog_popup.tscn" type="PackedScene" id=16]
+[ext_resource path="res://game_screen/bonus_label.gd" type="Script" id=17]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 3 )
@@ -148,6 +149,7 @@ margin_left = -123.0
 margin_top = -7.0
 margin_right = 123.0
 margin_bottom = 32.0
+custom_colors/font_color = Color( 0.909804, 0.756863, 0.439216, 1 )
 custom_fonts/font = ExtResource( 7 )
 text = "WEEK 1"
 align = 1
@@ -423,6 +425,19 @@ visible = false
 [node name="SoundtrackPlayer" type="AudioStreamPlayer" parent="."]
 pause_mode = 2
 bus = "Music"
+
+[node name="BonusLabel" type="Label" parent="."]
+visible = false
+margin_top = 299.0
+margin_right = 128.0
+margin_bottom = 328.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 1, 1, 1, 1 )
+custom_fonts/font = ExtResource( 9 )
+align = 1
+script = ExtResource( 17 )
+
+[node name="Tween" type="Tween" parent="BonusLabel"]
 
 [connection signal="mood_ran_out" from="Top/Hud" to="." method="_on_Hud_mood_ran_out"]
 [connection signal="button_down" from="FastForwardCotainer/FastForwardButton" to="." method="_on_FastForwardButton_button_down"]
