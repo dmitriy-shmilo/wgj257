@@ -598,3 +598,7 @@ func _on_SoundtrackPlayer_finished() -> void:
 	_soundtrack_idx = (_soundtrack_idx + 1) % PLAYLIST.size()
 	_soundtrack_player.stream = PLAYLIST[_soundtrack_idx]
 	_soundtrack_player.play()
+
+
+func _on_PauseButton_pressed() -> void:
+	_gui.pause()

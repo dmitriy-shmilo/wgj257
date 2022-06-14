@@ -1,6 +1,15 @@
-# wgj257 #
+# BOOK IT #
 
-A Weekly Game Jam #257 entry, made with [Godot engine](https://godotengine.org/).
+A Weekly Game Jam #257 entry, made with [Godot engine](https://godotengine.org/) in roughly three days. The theme is "Books", so this game is about booking time slots on a calendar.
+
+# Screenshots #
+
+<p style="float: left">
+    <img src="screenshots/screenshot1.png" width="320"/>
+    <img src="screenshots/screenshot2.png" width="320"/>
+    <img src="screenshots/screenshot3.png" width="320"/>
+    <img src="screenshots/screenshot4.png" width="320"/>
+</p>
 
 # Credits #
 

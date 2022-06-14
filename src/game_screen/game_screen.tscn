@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://game_screen/game_screen.gd" type="Script" id=1]
 [ext_resource path="res://game_screen/gui.tscn" type="PackedScene" id=2]
@@ -90,6 +90,10 @@ tracks/1/keys = {
 "update": 1,
 "values": [ Vector2( 122, 14 ), Vector2( 121, 14 ), Vector2( 122, 14 ), Vector2( 123, 14 ) ]
 }
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 3 )
+region = Rect2( 64, 16, 16, 16 )
 
 [sub_resource type="Animation" id=8]
 length = 0.001
@@ -215,9 +219,9 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-margin_left = -17.0
+margin_left = -65.0
 margin_top = -5.0
-margin_right = -10.0
+margin_right = -58.0
 margin_bottom = 4.0
 texture = ExtResource( 11 )
 
@@ -226,9 +230,9 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-margin_left = -127.0
+margin_left = -175.0
 margin_top = -8.0
-margin_right = -20.0
+margin_right = -68.0
 margin_bottom = 5.0
 theme = ExtResource( 5 )
 custom_fonts/font = ExtResource( 9 )
@@ -256,6 +260,28 @@ anims/default = SubResource( 6 )
 [node name="Shaker" parent="Top/Hud" instance=ExtResource( 13 )]
 
 [node name="SfxPlayer" type="AudioStreamPlayer" parent="Top/Hud"]
+
+[node name="PauseButton" type="Button" parent="Top/Hud"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -39.0
+margin_top = -14.0
+margin_right = -5.0
+margin_bottom = 13.0
+custom_fonts/font = ExtResource( 9 )
+
+[node name="TextureRect" type="TextureRect" parent="Top/Hud/PauseButton"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -8.0
+margin_top = -9.0
+margin_right = 8.0
+margin_bottom = 7.0
+texture = SubResource( 9 )
 
 [node name="Gui" parent="." instance=ExtResource( 2 )]
 
@@ -466,6 +492,7 @@ script = ExtResource( 17 )
 [node name="Tween" type="Tween" parent="BonusLabel"]
 
 [connection signal="mood_ran_out" from="Top/Hud" to="." method="_on_Hud_mood_ran_out"]
+[connection signal="pressed" from="Top/Hud/PauseButton" to="." method="_on_PauseButton_pressed"]
 [connection signal="button_down" from="FastForwardCotainer/FastForwardButton" to="." method="_on_FastForwardButton_button_down"]
 [connection signal="button_up" from="FastForwardCotainer/FastForwardButton" to="." method="_on_FastForwardButton_button_up"]
 [connection signal="ready" from="FastForwardCotainer/AnimationPlayer" to="." method="_on_AnimationPlayer_ready"]
